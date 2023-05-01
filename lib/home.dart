@@ -5,8 +5,6 @@ import 'package:sos_restau/profile.dart';
 
 import 'panier.dart';
 
-int _selectedIndex = 0;
-
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
   @override
@@ -151,25 +149,6 @@ class HomePage extends StatelessWidget {
               label: 'Profil',
             ),
           ],
-          currentIndex: _selectedIndex,
-          onTap: (index) {
-            if (index == 0) {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const HomePage()),
-              );
-            } else if (index == 1) {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const CartPage()),
-              );
-            } else if (index == 2) {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const ProfilePage()),
-              );
-            }
-          },
         ));
   }
 }

@@ -112,25 +112,6 @@ class _ProfilePageState extends State<ProfilePage> {
               label: 'Profil',
             ),
           ],
-          currentIndex: _selectedIndex,
-          onTap: (index) {
-            if (index == 0) {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const HomePage()),
-              );
-            } else if (index == 1) {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const CartPage()),
-              );
-            } else if (index == 2) {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const ProfilePage()),
-              );
-            }
-          },
         ));
   }
 }

@@ -3,8 +3,6 @@ import 'package:sos_restau/home.dart';
 import 'package:sos_restau/panier.dart';
 import 'package:sos_restau/profile.dart';
 
-int _selectedIndex = 0;
-
 class AllCategoriesPage extends StatelessWidget {
   const AllCategoriesPage({Key? key}) : super(key: key);
 
@@ -104,25 +102,6 @@ class AllCategoriesPage extends StatelessWidget {
               label: 'Profil',
             ),
           ],
-          currentIndex: _selectedIndex,
-          onTap: (index) {
-            if (index == 0) {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const HomePage()),
-              );
-            } else if (index == 1) {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const CartPage()),
-              );
-            } else if (index == 2) {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const ProfilePage()),
-              );
-            }
-          },
         ));
   }
 }
