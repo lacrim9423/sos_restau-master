@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:sos_restau/home.dart';
-import 'package:sos_restau/panier.dart';
-import 'package:sos_restau/profile.dart';
 
 class FruitsCategoryPage extends StatelessWidget {
   final List<Fruit> fruits = [
@@ -163,25 +160,21 @@ class FruitsCategoryPage extends StatelessWidget {
           },
         ),
         bottomNavigationBar: BottomNavigationBar(
-          backgroundColor: Colors.orange.shade50,
-          items: const [
-            BottomNavigationBarItem(
-              activeIcon: HomePage(),
-              icon: Icon(Icons.home),
-              label: 'Accueil',
-            ),
-            BottomNavigationBarItem(
-              activeIcon: CartPage(),
-              icon: Icon(Icons.shopping_cart),
-              label: 'Panier',
-            ),
-            BottomNavigationBarItem(
-              activeIcon: ProfilePage(),
-              icon: Icon(Icons.person),
-              label: 'Profil',
-            ),
-          ],
-        ));
+            backgroundColor: Colors.orange.shade50,
+            items: const [
+              BottomNavigationBarItem(
+                icon: Icon(Icons.home),
+                label: 'Accueil',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.shopping_cart),
+                label: 'Panier',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.person),
+                label: 'Profil',
+              ),
+            ]));
   }
 }
 

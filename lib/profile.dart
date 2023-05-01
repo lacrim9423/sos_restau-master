@@ -102,7 +102,9 @@ class _ProfilePageState extends State<ProfilePage> {
               label: 'Accueil',
             ),
             BottomNavigationBarItem(
-              activeIcon: CartPage(),
+              activeIcon: CartPage(
+                cartItems: [],
+              ),
               icon: Icon(Icons.shopping_cart),
               label: 'Panier',
             ),

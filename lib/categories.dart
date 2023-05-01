@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:sos_restau/home.dart';
-import 'package:sos_restau/panier.dart';
-import 'package:sos_restau/profile.dart';
 
 class AllCategoriesPage extends StatelessWidget {
   const AllCategoriesPage({Key? key}) : super(key: key);
@@ -9,100 +6,98 @@ class AllCategoriesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Row(
-            children: const [
-              SizedBox(width: 8),
-              Text('Grocery Delivery'),
-            ],
-          ),
-          actions: const [
-            CircleAvatar(
-              backgroundImage: NetworkImage(
-                'https://randomuser.me/api/portraits/men/1.jpg',
-              ),
-            ),
-            Text('John Doe'),
-            SizedBox(width: 16),
+      appBar: AppBar(
+        title: Row(
+          children: const [
+            SizedBox(width: 8),
+            Text('Grocery Delivery'),
           ],
-          bottom: PreferredSize(
-            preferredSize: const Size.fromHeight(48),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: TextField(
-                decoration: InputDecoration(
-                  hintText: 'Search for products',
-                  filled: true,
-                  fillColor: Colors.white,
-                  suffixIcon: const Icon(Icons.search),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(24),
-                  ),
+        ),
+        actions: const [
+          CircleAvatar(
+            backgroundImage: NetworkImage(
+              'https://randomuser.me/api/portraits/men/1.jpg',
+            ),
+          ),
+          Text('John Doe'),
+          SizedBox(width: 16),
+        ],
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(48),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: TextField(
+              decoration: InputDecoration(
+                hintText: 'Search for products',
+                filled: true,
+                fillColor: Colors.white,
+                suffixIcon: const Icon(Icons.search),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(24),
                 ),
               ),
             ),
           ),
         ),
-        body: GridView.count(
-          crossAxisCount: 2,
-          mainAxisSpacing: 8,
-          crossAxisSpacing: 8,
-          padding: const EdgeInsets.all(8),
-          children: const [
-            _CategoryCard(
-              image: 'assets/images/fruits.jpg',
-              title: 'Fruits',
-            ),
-            _CategoryCard(
-              image: 'assets/images/veggies.jpg',
-              title: 'Veggies',
-            ),
-            _CategoryCard(
-              image: 'assets/images/bread.jpg',
-              title: 'Bread',
-            ),
-            _CategoryCard(
-              image: 'assets/images/drinks.jpg',
-              title: 'Drinks',
-            ),
-            _CategoryCard(
-              image: 'assets/images/grocery.jpg',
-              title: 'Grocery',
-            ),
-            _CategoryCard(
-              image: 'assets/images/meat.jpg',
-              title: 'Meat',
-            ),
-            _CategoryCard(
-              image: 'assets/images/dairy.jpg',
-              title: 'Dairy',
-            ),
-            _CategoryCard(
-              image: 'assets/images/hygiene.jpg',
-              title: 'Hygiene',
-            ),
-          ],
-        ),
-        bottomNavigationBar: BottomNavigationBar(
-          backgroundColor: Colors.orange.shade50,
-          items: const [
-            BottomNavigationBarItem(
-              activeIcon: HomePage(),
-              icon: Icon(Icons.home),
-              label: 'Accueil',
-            ),
-            BottomNavigationBarItem(
-              activeIcon: CartPage(),
-              icon: Icon(Icons.shopping_cart),
-              label: 'Panier',
-            ),
-            BottomNavigationBarItem(
-              activeIcon: ProfilePage(),
-              icon: Icon(Icons.person),
-              label: 'Profil',
-            ),
-          ],
-        ));
+      ),
+      body: GridView.count(
+        crossAxisCount: 2,
+        mainAxisSpacing: 8,
+        crossAxisSpacing: 8,
+        padding: const EdgeInsets.all(8),
+        children: const [
+          _CategoryCard(
+            image: 'assets/images/fruits.jpg',
+            title: 'Fruits',
+          ),
+          _CategoryCard(
+            image: 'assets/images/veggies.jpg',
+            title: 'Veggies',
+          ),
+          _CategoryCard(
+            image: 'assets/images/bread.jpg',
+            title: 'Bread',
+          ),
+          _CategoryCard(
+            image: 'assets/images/drinks.jpg',
+            title: 'Drinks',
+          ),
+          _CategoryCard(
+            image: 'assets/images/grocery.jpg',
+            title: 'Grocery',
+          ),
+          _CategoryCard(
+            image: 'assets/images/meat.jpg',
+            title: 'Meat',
+          ),
+          _CategoryCard(
+            image: 'assets/images/dairy.jpg',
+            title: 'Dairy',
+          ),
+          _CategoryCard(
+            image: 'assets/images/hygiene.jpg',
+            title: 'Hygiene',
+          ),
+        ],
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: Colors.orange.shade50,
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Accueil',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.shopping_cart),
+            label: 'Panier',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Profil',
+          ),
+        ],
+      ),
+    );
   }
 }
 

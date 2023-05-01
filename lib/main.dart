@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sos_restau/home.dart';
+import 'package:sos_restau/panier.dart';
 
 import 'singup.dart';
 
@@ -117,6 +118,18 @@ class _LoginPageState extends State<LoginPage> {
               },
               child: const Text("Vous n'avez pas de compte? Enregistrez"),
             ),
+            ElevatedButton(
+              child: Text('panier'),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const CartPage(
+                            cartItems: [],
+                          )),
+                );
+              },
+            )
           ],
         ),
       ),
