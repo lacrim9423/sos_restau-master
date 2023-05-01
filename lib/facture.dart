@@ -12,9 +12,9 @@ Future<void> generateInvoice(List<CartItem> carts) async {
     build: (pw.Context context) {
       return pw.Column(
         children: [
-          pw.Text('INVOICE', style: pw.TextStyle(fontSize: 24)),
+          pw.Text('INVOICE', style: const pw.TextStyle(fontSize: 24)),
           pw.Text('Order Date: ${DateTime.now().toString()}',
-              style: pw.TextStyle(fontSize: 16)),
+              style: const pw.TextStyle(fontSize: 16)),
           pw.SizedBox(height: 10),
         ],
       );
