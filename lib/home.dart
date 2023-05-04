@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:sos_restau/Categories/drinks/boissons.dart';
 import 'package:sos_restau/categories.dart';
-import 'package:sos_restau/fruits.dart';
-import 'package:sos_restau/panier.dart';
+import 'package:sos_restau/Categories/fruits.dart';
+
+import 'Categories/legumes.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -90,7 +92,7 @@ class HomePage extends StatelessWidget {
                     _CategoryCard(
                       image: 'assets/images/veggies.jpg',
                       title: 'Veggies',
-                      onTap: () => _goToFruitsCategoryPage(context),
+                      onTap: () => _goToVeggiesCategoryPage(context),
                     ),
                     _CategoryCard(
                       image: 'assets/images/bread.jpg',
@@ -100,7 +102,7 @@ class HomePage extends StatelessWidget {
                     _CategoryCard(
                       image: 'assets/images/drinks.jpg',
                       title: 'Drinks',
-                      onTap: () => _goToFruitsCategoryPage(context),
+                      onTap: () => _goToDrinksCategoryPage(context),
                     ),
                     _CategoryCard(
                       image: 'assets/images/grocery.jpg',
@@ -153,7 +155,21 @@ class HomePage extends StatelessWidget {
 void _goToFruitsCategoryPage(BuildContext context) {
   Navigator.push(
     context,
-    MaterialPageRoute(builder: (context) => FruitsCategoryPage()),
+    MaterialPageRoute(builder: (context) => const FruitCategoryPage()),
+  );
+}
+
+void _goToVeggiesCategoryPage(BuildContext context) {
+  Navigator.push(
+    context,
+    MaterialPageRoute(builder: (context) => const VegetablesCategoryPage()),
+  );
+}
+
+void _goToDrinksCategoryPage(BuildContext context) {
+  Navigator.push(
+    context,
+    MaterialPageRoute(builder: (context) => const DrinkCategoryPage()),
   );
 }
 

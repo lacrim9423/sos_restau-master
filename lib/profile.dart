@@ -1,6 +1,7 @@
+// ignore_for_file: sized_box_for_whitespace
+
 import 'package:flutter/material.dart';
 import 'package:sos_restau/home.dart';
-import 'package:sos_restau/panier.dart';
 
 int _selectedIndex = 0;
 
@@ -8,6 +9,7 @@ class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _ProfilePageState createState() => _ProfilePageState();
 }
 
@@ -102,9 +104,6 @@ class _ProfilePageState extends State<ProfilePage> {
               label: 'Accueil',
             ),
             BottomNavigationBarItem(
-              activeIcon: CartPage(
-                cartItems: [],
-              ),
               icon: Icon(Icons.shopping_cart),
               label: 'Panier',
             ),
