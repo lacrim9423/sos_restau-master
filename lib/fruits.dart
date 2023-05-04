@@ -1,6 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:sos_restau/cart_item.dart';
 
-class FruitsCategoryPage extends StatelessWidget {
+class FruitsCategoryPage extends StatefulWidget {
+  const FruitsCategoryPage({Key? key}) : super(key: key);
+
+  @override
+  _FruitsCategoryPageState createState() => _FruitsCategoryPageState();
+}
+
+class _FruitsCategoryPageState extends State<FruitsCategoryPage> {
   final List<Fruit> fruits = [
     Fruit(
       name: 'Apple',
@@ -74,10 +83,24 @@ class FruitsCategoryPage extends StatelessWidget {
     ),
   ];
 
-  FruitsCategoryPage({super.key});
+  final Cart _cart = Cart(items: []);
+
+  void _addToCart(Fruit fruit) {
+    setState(() {
+      _cart.addItem(
+        CartItem(
+          ref: fruit.reference,
+          name: fruit.name,
+          price: fruit.price,
+        ),
+      );
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+    final Cart cart = Provider.of<Cart>(context);
+
     return Scaffold(
         appBar: AppBar(
           title: const Text('Fruits'),
@@ -131,7 +154,20 @@ class FruitsCategoryPage extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               IconButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  setState(() {
+                                    final CartItem cartItem = CartItem(
+                                      ref: item.id,
+                                      name: item.name,
+                                      price: item.price,
+                                    );
+                                    cart.add(cartItem);
+                                  });
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                        content: Text('Item added to cart')),
+                                  );
+                                },
                                 icon: const Icon(Icons.add),
                               ),
                               const SizedBox(height: 8),
@@ -316,5 +352,33 @@ class ProductCard extends StatelessWidget {
         ],
       ),
     );
+  }
+}
+
+class Cart {
+  final List<CartItem> items;
+
+  Cart({required this.items});
+  void add(CartItem item) {
+    items.add(item);
+  }
+
+  double get totalPrice => items.fold(0, (sum, item) => sum + item.total);
+
+  void addItem(CartItem item) {
+    final index = items.indexWhere((cartItem) => cartItem.ref == item.ref);
+    if (index >= 0) {
+      items[index].incrementQuantity();
+    } else {
+      items.add(item);
+    }
+  }
+
+  void removeItem(int itemId) {
+    items.removeWhere((item) => item.ref == itemId);
+  }
+
+  void clear() {
+    items.clear();
   }
 }
