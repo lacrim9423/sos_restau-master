@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:flash/flash.dart';
 import 'package:flutter/material.dart';
 import 'package:sos_restau/Categories/Produits%20Laitiers/p_laitiers.dart';
@@ -5,7 +7,7 @@ import 'package:sos_restau/Categories/Produits%20Laitiers/p_laitiers.dart';
 class DairyProductCard extends StatefulWidget {
   final DairyProduct product;
 
-  const DairyProductCard({required this.product});
+  const DairyProductCard({super.key, required this.product});
 
   @override
   _DairyProductCardState createState() => _DairyProductCardState();

@@ -72,11 +72,13 @@ class BreadCategoryPage extends StatelessWidget {
     ),
   ];
 
+  BreadCategoryPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Breads'),
+        title: const Text('Breads'),
       ),
       body: ListView.builder(
         itemCount: breads.length,

@@ -54,6 +54,8 @@ class MeatCategoryPage extends StatelessWidget {
     ),
   ];
 
+  MeatCategoryPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -59,7 +59,7 @@ class HygieneCategoryPage extends StatelessWidget {
             imageUrl: product.image,
             price: product.price,
             available: product.available,
-            description: product.description ?? '  ',
+            description: product.description,
           );
         },
       ),

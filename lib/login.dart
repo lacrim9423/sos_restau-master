@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:sos_restau/home.dart';
 import 'package:sos_restau/register.dart';
@@ -13,27 +14,33 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   //texte controllers
-  final _emailController = TextEditingController();
-  TextEditingController final_motdepasseController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _motDePasseController = TextEditingController();
 
   Future<void> signIn() async {
     try {
       await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: _emailController.text.trim(),
-        password: final_motdepasseController.text.trim(),
+        password: _motDePasseController.text.trim(),
       );
       Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (context) => const HomePage()));
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
-        print('No user found for that email.');
+        if (kDebugMode) {
+          print('No user found for that email.');
+        }
         // Display an error message to the user
       } else if (e.code == 'wrong-password') {
-        print('Wrong password provided for that user.');
+        if (kDebugMode) {
+          print('Wrong password provided for that user.');
+        }
         // Display an error message to the user
       }
     } catch (e) {
-      print('Error occurred while signing in: $e');
+      if (kDebugMode) {
+        print('Error occurred while signing in: $e');
+      }
       // Display an error message to the user
     }
   }
@@ -41,7 +48,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void dispose() async {
     _emailController.dispose();
-    final_motdepasseController.dispose();
+    _motDePasseController.dispose();
     super.dispose();
   }
 
@@ -98,7 +105,7 @@ class _LoginPageState extends State<LoginPage> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 25.0),
               child: TextField(
-                controller: final_motdepasseController,
+                controller: _motDePasseController,
                 decoration: InputDecoration(
                   enabledBorder: OutlineInputBorder(
                     borderSide: const BorderSide(color: Colors.white),
@@ -182,7 +189,8 @@ class _LoginPageState extends State<LoginPage> {
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => RegisterPage()),
+                      MaterialPageRoute(
+                          builder: (context) => const RegisterPage()),
                     );
                   },
                   child: const Text(

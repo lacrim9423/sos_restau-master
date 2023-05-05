@@ -1,6 +1,7 @@
 // ignore_for_file: non_constant_identifier_names, use_build_context_synchronously
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:sos_restau/home.dart';
 import 'package:sos_restau/login.dart';
@@ -15,67 +16,64 @@ class RegisterPage extends StatefulWidget {
 
 class _RegisterPageState extends State<RegisterPage> {
   //texte controllers
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController final_motdepasseController =
-      TextEditingController();
-  final TextEditingController final_confirmermotdepasseController =
-      TextEditingController();
-  final TextEditingController _nomController = TextEditingController();
-  final TextEditingController _prenomController = TextEditingController();
-  final TextEditingController _ageController = TextEditingController();
-  final TextEditingController _numerodetelephoneController =
-      TextEditingController();
-  final TextEditingController _adresseController = TextEditingController();
-  final TextEditingController _sociteController = TextEditingController();
-  final TextEditingController _lavilleController = TextEditingController();
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  final _restaurantController = TextEditingController();
+  final _nomController = TextEditingController();
+  final _prenomController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _motDePasseController = TextEditingController();
+  final _motDePasseConfirmerController = TextEditingController();
+  final _phoneController = TextEditingController();
+  final _adresseController = TextEditingController();
   final FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
 
   @override
   void dispose() {
     _emailController.dispose();
-    final_motdepasseController.dispose();
-    final_confirmermotdepasseController.dispose();
+    _motDePasseController.dispose();
+    _motDePasseConfirmerController.dispose();
     _nomController.dispose();
     _prenomController.dispose();
-    _ageController.dispose();
-    _numerodetelephoneController.dispose();
+    _phoneController.dispose();
     _adresseController.dispose();
-    _sociteController.dispose();
-    _lavilleController.dispose();
+    _restaurantController.dispose();
     super.dispose();
   }
 ////// authentifier l'utilisateur
 
   Future<void> signUp() async {
-    try {
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(
-          email: _emailController.text,
-          password: final_motdepasseController.text);
-      User? user = FirebaseAuth.instance.currentUser;
-      if (user != null) {
-        await firebaseFirestore.collection("users").doc(user.uid).set({
-          "name": _nomController.text,
-          "email": _emailController.text,
-          "phone": _numerodetelephoneController.text
-        });
-        Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (context) => const HomePage()));
+    if (formKey.currentState!.validate()) {
+      try {
+        await FirebaseAuth.instance.createUserWithEmailAndPassword(
+            email: _emailController.text, password: _motDePasseController.text);
+        User? user = FirebaseAuth.instance.currentUser;
+        if (user != null) {
+          await firebaseFirestore.collection("users").doc(user.uid).set({
+            "name": _nomController.text,
+            "email": _emailController.text,
+            "phone": _phoneController.text
+          });
+          Navigator.of(context).pushReplacement(
+              MaterialPageRoute(builder: (context) => const HomePage()));
+        }
+      } on FirebaseAuthException catch (e) {
+        if (e.code == 'weak-password') {
+          ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text("Le mot de passe est trop faible")));
+        } else if (e.code == 'email-already-in-use') {
+          ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text("Ce compte existe déjà")));
+        }
+      } catch (e) {
+        if (kDebugMode) {
+          print(e);
+        }
       }
-    } on FirebaseAuthException catch (e) {
-      if (e.code == 'weak-password') {
-        ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text("Le mot de passe est trop faible")));
-      } else if (e.code == 'email-already-in-use') {
-        ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text("Ce compte existe déjà")));
-      }
-    } catch (e) {
-      print(e);
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const HomePage()),
+      );
     }
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => HomePage()),
-    );
   }
 
   Future<void> addUserDetails(
@@ -84,9 +82,7 @@ class _RegisterPageState extends State<RegisterPage> {
       String prenom,
       String email,
       String adresse,
-      String socite,
-      String laville,
-      int age,
+      String restaurant,
       String numerodetelephone) async {
     try {
       await firebaseFirestore.collection("users").doc().set({
@@ -95,13 +91,13 @@ class _RegisterPageState extends State<RegisterPage> {
         'prenom': prenom,
         'email': email,
         'adresse': adresse,
-        'socite': socite,
-        'laville': laville,
-        'age': age,
+        'restaurant': restaurant,
         'numerodetelephone': numerodetelephone,
       });
     } catch (e) {
-      print(e);
+      if (kDebugMode) {
+        print(e);
+      }
     }
     if (!passwordsMatch()) {
       showDialog(
@@ -123,25 +119,22 @@ class _RegisterPageState extends State<RegisterPage> {
       );
       return;
     }
-    var authResult = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+    await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: _emailController.text.trim(),
-        password: final_motdepasseController.text.trim());
+        password: _motDePasseController.text.trim());
     await addUserDetails(
       _nomController.text.trim(),
       _prenomController.text.trim(),
       _emailController.text.trim(),
       _adresseController.text.trim(),
-      _sociteController.text.trim(),
-      _lavilleController.text.trim(),
-      int.parse(_ageController.text.trim()) as String,
-      int.parse(_numerodetelephoneController.text.trim()),
-      final_motdepasseController.text.trim(),
+      _restaurantController.text.trim(),
+      int.parse(_phoneController.text.trim()) as String,
+      _motDePasseController.text.trim(),
     );
   }
 
   bool passwordsMatch() {
-    return final_motdepasseController.text ==
-        final_confirmermotdepasseController.text;
+    return _motDePasseController.text == _motDePasseConfirmerController.text;
   }
 
   @override
@@ -212,11 +205,11 @@ class _RegisterPageState extends State<RegisterPage> {
             ),
             const SizedBox(height: 10),
 
-            // age
+            // email
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 25.0),
               child: TextField(
-                controller: _ageController,
+                controller: _emailController,
                 decoration: InputDecoration(
                   enabledBorder: OutlineInputBorder(
                     borderSide: const BorderSide(color: Colors.white),
@@ -226,7 +219,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     borderSide: const BorderSide(color: Colors.deepPurple),
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  hintText: 'Age',
+                  hintText: 'Email',
                   fillColor: Colors.grey[200],
                   filled: true,
                 ),
@@ -238,7 +231,7 @@ class _RegisterPageState extends State<RegisterPage> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 25.0),
               child: TextField(
-                controller: _numerodetelephoneController,
+                controller: _phoneController,
                 decoration: InputDecoration(
                   enabledBorder: OutlineInputBorder(
                     borderSide: const BorderSide(color: Colors.white),
@@ -282,7 +275,7 @@ class _RegisterPageState extends State<RegisterPage> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 25.0),
               child: TextField(
-                controller: _sociteController,
+                controller: _restaurantController,
                 decoration: InputDecoration(
                   enabledBorder: OutlineInputBorder(
                     borderSide: const BorderSide(color: Colors.white),
@@ -292,51 +285,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     borderSide: const BorderSide(color: Colors.deepPurple),
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  hintText: 'Socitè',
-                  fillColor: Colors.grey[200],
-                  filled: true,
-                ),
-              ),
-            ),
-            const SizedBox(height: 10),
-
-            // La Ville
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 25.0),
-              child: TextField(
-                controller: _lavilleController,
-                decoration: InputDecoration(
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(color: Colors.white),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(color: Colors.deepPurple),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  hintText: 'La Ville',
-                  fillColor: Colors.grey[200],
-                  filled: true,
-                ),
-              ),
-            ),
-            const SizedBox(height: 10),
-
-            // email
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 25.0),
-              child: TextField(
-                controller: _emailController,
-                decoration: InputDecoration(
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(color: Colors.white),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(color: Colors.deepPurple),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  hintText: 'Email',
+                  hintText: 'Restaurant',
                   fillColor: Colors.grey[200],
                   filled: true,
                 ),
@@ -348,7 +297,7 @@ class _RegisterPageState extends State<RegisterPage> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 25.0),
               child: TextField(
-                controller: final_motdepasseController,
+                controller: _motDePasseController,
                 decoration: InputDecoration(
                   enabledBorder: OutlineInputBorder(
                     borderSide: const BorderSide(color: Colors.white),
@@ -370,7 +319,7 @@ class _RegisterPageState extends State<RegisterPage> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 25.0),
               child: TextField(
-                controller: final_confirmermotdepasseController,
+                controller: _motDePasseConfirmerController,
                 decoration: InputDecoration(
                   enabledBorder: OutlineInputBorder(
                     borderSide: const BorderSide(color: Colors.white),
