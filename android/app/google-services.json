@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "722566073390",
+    "project_id": "sos-restau-a50ff",
+    "storage_bucket": "sos-restau-a50ff.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:722566073390:android:f0ddedf84fbe12afce63bf",
+        "android_client_info": {
+          "package_name": "com.example.sos_restau"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "722566073390-e8aqmvofn16ehk6bm0smnacojfvosv2r.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAm3FAo4OtpqlYzJnpjaBQdkybAbq36jEs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "722566073390-e8aqmvofn16ehk6bm0smnacojfvosv2r.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
