@@ -15,7 +15,6 @@ class RegisterPage extends StatefulWidget {
 
 class _RegisterPageState extends State<RegisterPage> {
   //texte controllers
-  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController final_motdepasseController =
       TextEditingController();
@@ -48,33 +47,35 @@ class _RegisterPageState extends State<RegisterPage> {
 ////// authentifier l'utilisateur
 
   Future<void> signUp() async {
-    if (formKey.currentState!.validate()) {
-      try {
-        await FirebaseAuth.instance.createUserWithEmailAndPassword(
-            email: _emailController.text,
-            password: final_motdepasseController.text);
-        User? user = FirebaseAuth.instance.currentUser;
-        if (user != null) {
-          await firebaseFirestore.collection("users").doc(user.uid).set({
-            "name": _nomController.text,
-            "email": _emailController.text,
-            "phone": _numerodetelephoneController.text
-          });
-          Navigator.of(context).pushReplacement(
-              MaterialPageRoute(builder: (context) => const HomePage()));
-        }
-      } on FirebaseAuthException catch (e) {
-        if (e.code == 'weak-password') {
-          ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text("Le mot de passe est trop faible")));
-        } else if (e.code == 'email-already-in-use') {
-          ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text("Ce compte existe déjà")));
-        }
-      } catch (e) {
-        print(e);
+    try {
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          email: _emailController.text,
+          password: final_motdepasseController.text);
+      User? user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        await firebaseFirestore.collection("users").doc(user.uid).set({
+          "name": _nomController.text,
+          "email": _emailController.text,
+          "phone": _numerodetelephoneController.text
+        });
+        Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (context) => const HomePage()));
       }
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'weak-password') {
+        ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text("Le mot de passe est trop faible")));
+      } else if (e.code == 'email-already-in-use') {
+        ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text("Ce compte existe déjà")));
+      }
+    } catch (e) {
+      print(e);
     }
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => HomePage()),
+    );
   }
 
   Future<void> addUserDetails(
@@ -135,10 +136,6 @@ class _RegisterPageState extends State<RegisterPage> {
       int.parse(_ageController.text.trim()) as String,
       int.parse(_numerodetelephoneController.text.trim()),
       final_motdepasseController.text.trim(),
-    );
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => HomePage()),
     );
   }
 
