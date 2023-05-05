@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:sos_restau/Categories/Produits%20Laitiers/produits_laitiers.dart';
+import 'package:sos_restau/Categories/alimentation.dart';
 import 'package:sos_restau/Categories/drinks/boissons.dart';
+import 'package:sos_restau/Categories/hygiene.dart';
 import 'package:sos_restau/Categories/pain/pain_c.dart';
 import 'package:sos_restau/Categories/viande/viande.dart';
 import 'package:sos_restau/categories.dart';
@@ -110,7 +112,7 @@ class HomePage extends StatelessWidget {
                     _CategoryCard(
                       image: 'assets/images/grocery.jpg',
                       title: 'Grocery',
-                      onTap: () => _goToFruitsCategoryPage(context),
+                      onTap: () => _goToGroceryCategoryPage(context),
                     ),
                     _CategoryCard(
                       image: 'assets/images/meat.jpg',
@@ -125,7 +127,7 @@ class HomePage extends StatelessWidget {
                     _CategoryCard(
                       image: 'assets/images/hygiene.jpg',
                       title: 'Hygiene',
-                      onTap: () => _goToFruitsCategoryPage(context),
+                      onTap: () => _goToHygieneCategoryPage(context),
                     ),
                   ],
                 ),
@@ -172,7 +174,7 @@ void _goToBreadCategoryPage(BuildContext context) {
 void _goToDairyCategoryPage(BuildContext context) {
   Navigator.push(
     context,
-    MaterialPageRoute(builder: (context) => DairyCategoryPage()),
+    MaterialPageRoute(builder: (context) => const DairyCategoryPage()),
   );
 }
 
@@ -183,10 +185,24 @@ void _goToMeatCategoryPage(BuildContext context) {
   );
 }
 
+void _goToGroceryCategoryPage(BuildContext context) {
+  Navigator.push(
+    context,
+    MaterialPageRoute(builder: (context) => const GroceryCategoryPage()),
+  );
+}
+
 void _goToVeggiesCategoryPage(BuildContext context) {
   Navigator.push(
     context,
     MaterialPageRoute(builder: (context) => const VegetablesCategoryPage()),
+  );
+}
+
+void _goToHygieneCategoryPage(BuildContext context) {
+  Navigator.push(
+    context,
+    MaterialPageRoute(builder: (context) => HygieneCategoryPage()),
   );
 }
 
