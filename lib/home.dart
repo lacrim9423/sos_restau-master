@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sos_restau/Categories/Produits%20Laitiers/produits_laitiers.dart';
 import 'package:sos_restau/Categories/drinks/boissons.dart';
+import 'package:sos_restau/Categories/pain/pain_c.dart';
 import 'package:sos_restau/categories.dart';
 import 'package:sos_restau/Categories/fruits.dart';
 
@@ -98,7 +99,7 @@ class HomePage extends StatelessWidget {
                     _CategoryCard(
                       image: 'assets/images/bread.jpg',
                       title: 'Bread',
-                      onTap: () => _goToFruitsCategoryPage(context),
+                      onTap: () => _goToBreadCategoryPage(context),
                     ),
                     _CategoryCard(
                       image: 'assets/images/drinks.jpg',
@@ -157,6 +158,13 @@ void _goToFruitsCategoryPage(BuildContext context) {
   Navigator.push(
     context,
     MaterialPageRoute(builder: (context) => const FruitCategoryPage()),
+  );
+}
+
+void _goToBreadCategoryPage(BuildContext context) {
+  Navigator.push(
+    context,
+    MaterialPageRoute(builder: (context) => BreadCategoryPage()),
   );
 }
 
