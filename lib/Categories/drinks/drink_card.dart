@@ -1,3 +1,4 @@
+import 'package:flash/flash.dart';
 import 'package:flutter/material.dart';
 import 'package:sos_restau/Categories/drinks/drink.dart';
 
@@ -90,21 +91,24 @@ class _DrinkCardState extends State<DrinkCard> {
                 ElevatedButton(
                   onPressed: widget.drink.available
                       ? () {
-                          showDialog(
+                          showFlash(
                             context: context,
-                            builder: (context) {
-                              return AlertDialog(
-                                title: const Text('Commande ajoutée'),
-                                content: Text(
-                                    'Vous avez ajouté ${widget.drink.name.toLowerCase()}${_selectedFlavor != null ? ' au parfum ${widget.drink.flavors.firstWhere((flavor) => flavor.id == _selectedFlavor).name.toLowerCase()}' : ''} à votre commande.'),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                    },
-                                    child: const Text('OK'),
+                            duration: const Duration(seconds: 2),
+                            builder: (_, controller) {
+                              return Flash(
+                                controller: controller,
+                                behavior: FlashBehavior.floating,
+                                position: FlashPosition.bottom,
+                                margin: const EdgeInsets.all(16),
+                                borderRadius: BorderRadius.circular(8),
+                                backgroundColor: Colors.grey[900]!,
+                                child: const DefaultTextStyle(
+                                  style: TextStyle(color: Colors.white),
+                                  child: Padding(
+                                    padding: EdgeInsets.all(8),
+                                    child: Text('Produit ajouté au panier!'),
                                   ),
-                                ],
+                                ),
                               );
                             },
                           );
