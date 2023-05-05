@@ -3,11 +3,16 @@ import 'package:sos_restau/Categories/Produits%20Laitiers/p_laitiers.dart';
 import 'package:sos_restau/Categories/Produits%20Laitiers/p_laitiers_card.dart';
 
 class DairyCategoryPage extends StatefulWidget {
+  const DairyCategoryPage({super.key});
+
   @override
+  // ignore: library_private_types_in_public_api
   _DairyCategoryPageState createState() => _DairyCategoryPageState();
 }
 
 class _DairyCategoryPageState extends State<DairyCategoryPage> {
+  int _quantity = 0;
+
   // final List<DairyProduct> _dairyProducts = [
   //    const DairyProduct(
   //     id: '1',

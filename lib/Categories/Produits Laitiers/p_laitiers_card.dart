@@ -14,6 +14,7 @@ class DairyProductCard extends StatefulWidget {
 class _DairyProductCardState extends State<DairyProductCard> {
   String? _selectedUnity;
   bool _isLiquid = true;
+  int _quantity = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -62,6 +63,32 @@ class _DairyProductCardState extends State<DairyProductCard> {
                       _selectedUnity = value!;
                     });
                   },
+                ),
+                Center(
+                  child: Row(
+                    children: [
+                      IconButton(
+                        onPressed: () {
+                          setState(() {
+                            _quantity = _quantity > 0 ? _quantity - 1 : 0;
+                          });
+                        },
+                        icon: const Icon(Icons.remove),
+                      ),
+                      Text(
+                        '$_quantity',
+                        style: const TextStyle(fontSize: 16),
+                      ),
+                      IconButton(
+                        onPressed: () {
+                          setState(() {
+                            _quantity += 1;
+                          });
+                        },
+                        icon: const Icon(Icons.add),
+                      ),
+                    ],
+                  ),
                 ),
                 ElevatedButton(
                   onPressed: widget.product.available
