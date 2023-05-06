@@ -40,26 +40,26 @@ class HygieneCategoryPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Hygiene'),
+        title: const Text('Hygiène'),
       ),
       body: GridView.builder(
-        padding: const EdgeInsets.all(10),
+        padding: const EdgeInsets.all(8),
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
           childAspectRatio: 0.7,
-          crossAxisSpacing: 10,
-          mainAxisSpacing: 10,
+          mainAxisSpacing: 8,
+          crossAxisSpacing: 8,
         ),
         itemCount: products.length,
-        itemBuilder: (ctx, index) {
+        itemBuilder: (context, index) {
           final product = products[index];
           return ProductCard(
             product: product,
             title: product.name,
+            description: '',
             imageUrl: product.image,
             price: product.price,
             available: product.available,
-            description: product.description,
           );
         },
       ),

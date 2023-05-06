@@ -47,18 +47,26 @@ class _FruitCategoryPageState extends State<FruitCategoryPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Fruits'),
+        title: const Text('Grocery Category'),
       ),
-      body: ListView.builder(
+      body: GridView.builder(
+        padding: const EdgeInsets.all(8),
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          childAspectRatio: 0.7,
+          mainAxisSpacing: 8,
+          crossAxisSpacing: 8,
+        ),
         itemCount: _products.length,
-        itemBuilder: (BuildContext context, int index) {
+        itemBuilder: (context, index) {
+          final product = _products[index];
           return ProductCard(
-            product: _products[index],
-            title: _products[index].name,
-            description: _products[index].description,
-            imageUrl: _products[index].image,
-            price: _products[index].price,
-            available: _products[index].available,
+            product: product,
+            title: product.name,
+            description: '',
+            imageUrl: product.image,
+            price: product.price,
+            available: product.available,
           );
         },
       ),

@@ -61,7 +61,7 @@ class _GroceryCategoryPageState extends State<GroceryCategoryPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Grocery Category'),
+        title: const Text('Épicerie'),
       ),
       body: GridView.builder(
         padding: const EdgeInsets.all(8),
