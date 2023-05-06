@@ -200,7 +200,7 @@ class _AuthPageState extends State<AuthPage> {
     if (showLoginPage) {
       return const LoginPage();
     } else {
-      return const RegisterPage();
+      return RegisterPage();
     }
   }
 }

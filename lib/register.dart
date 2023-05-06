@@ -8,15 +8,13 @@ import 'package:sos_restau/login.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class RegisterPage extends StatefulWidget {
-  const RegisterPage({Key? key}) : super(key: key);
+  RegisterPage({Key? key}) : super(key: key);
 
   @override
   State<RegisterPage> createState() => _RegisterPageState();
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-  //texte controllers
-  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final _restaurantController = TextEditingController();
   final _nomController = TextEditingController();
   final _prenomController = TextEditingController();
@@ -42,37 +40,34 @@ class _RegisterPageState extends State<RegisterPage> {
 ////// authentifier l'utilisateur
 
   Future<void> signUp() async {
-    if (formKey.currentState!.validate()) {
-      try {
-        await FirebaseAuth.instance.createUserWithEmailAndPassword(
-            email: _emailController.text, password: _motDePasseController.text);
-        User? user = FirebaseAuth.instance.currentUser;
-        if (user != null) {
-          await firebaseFirestore.collection("users").doc(user.uid).set({
-            "name": _nomController.text,
-            "email": _emailController.text,
-            "phone": _phoneController.text
-          });
-          Navigator.of(context).pushReplacement(
-              MaterialPageRoute(builder: (context) => const HomePage()));
-        }
-      } on FirebaseAuthException catch (e) {
-        if (e.code == 'weak-password') {
-          ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text("Le mot de passe est trop faible")));
-        } else if (e.code == 'email-already-in-use') {
-          ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text("Ce compte existe déjà")));
-        }
-      } catch (e) {
-        if (kDebugMode) {
-          print(e);
-        }
+    try {
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          email: _emailController.text, password: _motDePasseController.text);
+      User? user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        await firebaseFirestore.collection("users").doc(user.uid).set({
+          "nom": _nomController.text,
+          "email": _emailController.text,
+          "phone": _phoneController.text,
+          "prenom": _prenomController,
+          "restaurant": _restaurantController,
+          "adresse": _adresseController,
+        });
       }
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => const HomePage()),
-      );
+      Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => const HomePage()));
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'weak-password') {
+        ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text("Le mot de passe est trop faible")));
+      } else if (e.code == 'email-already-in-use') {
+        ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text("Ce compte existe déjà")));
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
     }
   }
 
