@@ -1,6 +1,6 @@
 import 'package:flash/flash.dart';
 import 'package:flutter/material.dart';
-import 'package:sos_restau/produit.dart';
+import 'package:sos_restau/class/produit.dart';
 
 class ProductCard extends StatefulWidget {
   final Product product;

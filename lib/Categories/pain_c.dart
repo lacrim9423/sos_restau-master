@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:sos_restau/Categories/pain/pain.dart';
-import 'package:sos_restau/Categories/pain/pain_card.dart';
+import 'package:sos_restau/class/pain.dart';
+import 'package:sos_restau/models/pain_card.dart';
 
 class BreadCategoryPage extends StatelessWidget {
   final List<Bread> breads = [

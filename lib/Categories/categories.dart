@@ -41,10 +41,11 @@ class AllCategoriesPage extends StatelessWidget {
         ),
       ),
       body: GridView.count(
+        padding: const EdgeInsets.all(8),
         crossAxisCount: 2,
+        childAspectRatio: 0.7,
         mainAxisSpacing: 8,
         crossAxisSpacing: 8,
-        padding: const EdgeInsets.all(8),
         children: const [
           _CategoryCard(
             image: 'assets/images/fruits.jpg',

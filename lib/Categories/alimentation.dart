@@ -1,7 +1,7 @@
 // ignore_for_file: library_private_types_in_public_api
 
 import 'package:flutter/material.dart';
-import 'package:sos_restau/produit.dart';
+import 'package:sos_restau/class/produit.dart';
 import 'package:flash/flash.dart';
 
 class GroceryCategoryPage extends StatefulWidget {

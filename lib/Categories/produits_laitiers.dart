@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:sos_restau/Categories/Produits%20Laitiers/p_laitiers.dart';
-import 'package:sos_restau/Categories/Produits%20Laitiers/p_laitiers_card.dart';
+import 'package:sos_restau/class/p_laitiers.dart';
+import 'package:sos_restau/models/p_laitiers_card.dart';
 
 class DairyCategoryPage extends StatefulWidget {
   const DairyCategoryPage({super.key});

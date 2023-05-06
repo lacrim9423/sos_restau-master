@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'meat.dart';
-import 'meat_card.dart';
+import '../class/meat.dart';
+import '../models/meat_card.dart';
 
 class MeatCategoryPage extends StatelessWidget {
   final List<MeatProduct> meats = [

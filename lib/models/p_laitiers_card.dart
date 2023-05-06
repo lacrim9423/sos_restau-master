@@ -2,7 +2,7 @@
 
 import 'package:flash/flash.dart';
 import 'package:flutter/material.dart';
-import 'package:sos_restau/Categories/Produits%20Laitiers/p_laitiers.dart';
+import 'package:sos_restau/class/p_laitiers.dart';
 
 class DairyProductCard extends StatefulWidget {
   final DairyProduct product;

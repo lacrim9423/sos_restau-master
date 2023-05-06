@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:sos_restau/produit.dart';
-import 'package:sos_restau/product_card.dart';
+import 'package:sos_restau/class/produit.dart';
+import 'package:sos_restau/models/product_card.dart';
 
 class HygieneCategoryPage extends StatelessWidget {
   final List<Product> products = [

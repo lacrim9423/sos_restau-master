@@ -1,7 +1,7 @@
 // ignore_for_file: library_private_types_in_public_api
 
 import 'package:flutter/material.dart';
-import 'package:sos_restau/Categories/viande/meat.dart';
+import 'package:sos_restau/class/meat.dart';
 import 'package:flash/flash.dart';
 
 class MeatCard extends StatefulWidget {

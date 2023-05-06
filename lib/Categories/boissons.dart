@@ -1,8 +1,8 @@
 // ignore_for_file: library_private_types_in_public_api
 
 import 'package:flutter/material.dart';
-import 'package:sos_restau/Categories/drinks/drink.dart';
-import 'package:sos_restau/Categories/drinks/drink_card.dart';
+import 'package:sos_restau/class/drink.dart';
+import 'package:sos_restau/models/drink_card.dart';
 
 class DrinkCategoryPage extends StatefulWidget {
   const DrinkCategoryPage({Key? key}) : super(key: key);

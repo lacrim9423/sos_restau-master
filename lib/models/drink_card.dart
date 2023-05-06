@@ -1,6 +1,6 @@
 import 'package:flash/flash.dart';
 import 'package:flutter/material.dart';
-import 'package:sos_restau/Categories/drinks/drink.dart';
+import 'package:sos_restau/class/drink.dart';
 
 class DrinkCard extends StatefulWidget {
   final Drink drink;
