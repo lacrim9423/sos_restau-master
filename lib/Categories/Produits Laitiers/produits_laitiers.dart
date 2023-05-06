@@ -84,20 +84,44 @@ class _DairyCategoryPageState extends State<DairyCategoryPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Produits laitiers'),
+        title: const Text('Lait et Dérivés'),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: ListView.builder(
-          itemCount: _dairyProducts.length,
-          itemBuilder: (context, index) {
-            final dairyProduct = _dairyProducts[index];
-            return DairyProductCard(
-              product: dairyProduct,
-            );
-          },
+      body: GridView.builder(
+        padding: const EdgeInsets.all(8),
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          childAspectRatio: 0.7,
+          mainAxisSpacing: 8,
+          crossAxisSpacing: 8,
         ),
+        itemCount: _dairyProducts.length,
+        itemBuilder: (context, index) {
+          final dairyProduct = _dairyProducts[index];
+          return DairyProductCard(
+            product: dairyProduct,
+          );
+        },
       ),
     );
   }
+  // @override
+  // Widget build(BuildContext context) {
+  //   return Scaffold(
+  //     appBar: AppBar(
+  //       title: const Text('Produits laitiers'),
+  //     ),
+  //     body: Padding(
+  //       padding: const EdgeInsets.all(16.0),
+  //       child: ListView.builder(
+  //         itemCount: _dairyProducts.length,
+  //         itemBuilder: (context, index) {
+  //           final dairyProduct = _dairyProducts[index];
+  //           return DairyProductCard(
+  //             product: dairyProduct,
+  //           );
+  //         },
+  //       ),
+  //     ),
+  //   );
+  // }
 }

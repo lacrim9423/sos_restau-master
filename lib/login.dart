@@ -105,6 +105,7 @@ class _LoginPageState extends State<LoginPage> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 25.0),
               child: TextField(
+                obscureText: true,
                 controller: _motDePasseController,
                 decoration: InputDecoration(
                   enabledBorder: OutlineInputBorder(
@@ -189,8 +190,7 @@ class _LoginPageState extends State<LoginPage> {
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(
-                          builder: (context) =>  RegisterPage()),
+                      MaterialPageRoute(builder: (context) => RegisterPage()),
                     );
                   },
                   child: const Text(

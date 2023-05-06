@@ -292,6 +292,7 @@ class _RegisterPageState extends State<RegisterPage> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 25.0),
               child: TextField(
+                obscureText: true,
                 controller: _motDePasseController,
                 decoration: InputDecoration(
                   enabledBorder: OutlineInputBorder(
@@ -314,6 +315,7 @@ class _RegisterPageState extends State<RegisterPage> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 25.0),
               child: TextField(
+                obscureText: true,
                 controller: _motDePasseConfirmerController,
                 decoration: InputDecoration(
                   enabledBorder: OutlineInputBorder(

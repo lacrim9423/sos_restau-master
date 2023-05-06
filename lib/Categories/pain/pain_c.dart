@@ -80,7 +80,14 @@ class BreadCategoryPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Breads'),
       ),
-      body: ListView.builder(
+      body: GridView.builder(
+        padding: const EdgeInsets.all(8),
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          childAspectRatio: 0.7,
+          mainAxisSpacing: 8,
+          crossAxisSpacing: 8,
+        ),
         itemCount: breads.length,
         itemBuilder: (context, index) {
           return BreadCard(bread: breads[index]);

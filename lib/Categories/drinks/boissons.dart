@@ -92,7 +92,14 @@ class _DrinkCategoryPageState extends State<DrinkCategoryPage> {
       appBar: AppBar(
         title: const Text('Boissons'),
       ),
-      body: ListView.builder(
+      body: GridView.builder(
+        padding: const EdgeInsets.all(8),
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          childAspectRatio: 0.7,
+          mainAxisSpacing: 8,
+          crossAxisSpacing: 8,
+        ),
         itemCount: _drinks.length,
         itemBuilder: (BuildContext context, int index) {
           return DrinkCard(
