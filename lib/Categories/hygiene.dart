@@ -4,9 +4,9 @@ import 'package:sos_restau/class/produit.dart';
 import 'package:sos_restau/models/product_card.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-
 class HygieneCategoryPage extends StatelessWidget {
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
   Future<void> loadProductsFromFirestore() async {
     try {
       final QuerySnapshot<Map<String, dynamic>> snapshot =

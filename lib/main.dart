@@ -4,7 +4,7 @@ import 'package:sos_restau/login.dart';
 import 'package:sos_restau/register.dart';
 import 'Categories/hygiene.dart';
 
-Future<void> main() async {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: const FirebaseOptions(
@@ -15,7 +15,6 @@ Future<void> main() async {
       messagingSenderId: '722566073390',
     ),
   );
-  await loadProductsFromFirestore();
 
   runApp(const SosRestau());
 }
