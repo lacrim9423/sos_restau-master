@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:sos_restau/login.dart';
 import 'package:sos_restau/register.dart';
+import 'Categories/hygiene.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -14,6 +15,8 @@ Future<void> main() async {
       messagingSenderId: '722566073390',
     ),
   );
+  await loadProductsFromFirestore();
+
   runApp(const SosRestau());
 }
 
