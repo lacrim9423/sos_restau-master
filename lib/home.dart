@@ -2,12 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:sos_restau/Categories/produits_laitiers.dart';
 import 'package:sos_restau/Categories/alimentation.dart';
 import 'package:sos_restau/Categories/boissons.dart';
-import 'package:sos_restau/Categories/hygiene.dart';
+import 'Categories/hygiene.dart';
 import 'package:sos_restau/Categories/pain_c.dart';
 import 'package:sos_restau/Categories/viande.dart';
 import 'package:sos_restau/Categories/categories.dart';
 import 'package:sos_restau/Categories/fruits.dart';
-
 import 'Categories/legumes.dart';
 
 class HomePage extends StatelessWidget {
