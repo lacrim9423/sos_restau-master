@@ -45,17 +45,39 @@ class _RegisterPageState extends State<RegisterPage> {
           email: _emailController.text, password: _motDePasseController.text);
       User? user = FirebaseAuth.instance.currentUser;
       if (user != null) {
+        if (!passwordsMatch()) {
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: const Text("Passwords do not match"),
+                content: const Text("Please make sure your passwords match."),
+                actions: [
+                  ElevatedButton(
+                    child: const Text("OK"),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ],
+              );
+            },
+          );
+        }
         await firebaseFirestore.collection("users").doc(user.uid).set({
-          "nom": _nomController.text,
-          "email": _emailController.text,
-          "phone": _phoneController.text,
-          "prenom": _prenomController,
-          "restaurant": _restaurantController,
-          "adresse": _adresseController,
+          "nom": _nomController.text.trim(),
+          "email": _emailController.text.trim(),
+          "phone": _phoneController.text.trim(),
+          "prenom": _prenomController.text.trim(),
+          "restaurant": _restaurantController.text.trim(),
+          "adresse": _adresseController.text.trim(),
+          "motdepasse": _motDePasseController.text.trim()
         });
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => HomePage()),
+        );
       }
-      Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => const HomePage()));
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -69,63 +91,6 @@ class _RegisterPageState extends State<RegisterPage> {
         print(e);
       }
     }
-  }
-
-  Future<void> addUserDetails(
-      String motdepasse,
-      String nom,
-      String prenom,
-      String email,
-      String adresse,
-      String restaurant,
-      String numerodetelephone) async {
-    try {
-      await firebaseFirestore.collection("users").doc().set({
-        "motdepasse": motdepasse,
-        'nom': nom,
-        'prenom': prenom,
-        'email': email,
-        'adresse': adresse,
-        'restaurant': restaurant,
-        'numerodetelephone': numerodetelephone,
-      });
-    } catch (e) {
-      if (kDebugMode) {
-        print(e);
-      }
-    }
-    if (!passwordsMatch()) {
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text("Passwords do not match"),
-            content: const Text("Please make sure your passwords match."),
-            actions: [
-              ElevatedButton(
-                child: const Text("OK"),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
-          );
-        },
-      );
-      return;
-    }
-    await FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: _emailController.text.trim(),
-        password: _motDePasseController.text.trim());
-    await addUserDetails(
-      _nomController.text.trim(),
-      _prenomController.text.trim(),
-      _emailController.text.trim(),
-      _adresseController.text.trim(),
-      _restaurantController.text.trim(),
-      int.parse(_phoneController.text.trim()) as String,
-      _motDePasseController.text.trim(),
-    );
   }
 
   bool passwordsMatch() {
