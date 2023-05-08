@@ -2,17 +2,28 @@ import 'package:flutter/material.dart';
 import 'package:sos_restau/Categories/produits_laitiers.dart';
 import 'package:sos_restau/Categories/alimentation.dart';
 import 'package:sos_restau/Categories/boissons.dart';
+import 'package:sos_restau/panier.dart';
 import 'Categories/hygiene.dart';
 import 'package:sos_restau/Categories/pain_c.dart';
 import 'package:sos_restau/Categories/viande.dart';
 import 'package:sos_restau/Categories/categories.dart';
 import 'package:sos_restau/Categories/fruits.dart';
 import 'Categories/legumes.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
+  void _goToPanier(BuildContext context, String userId) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => CartPage(userId: userId)),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    final user = FirebaseAuth.instance.currentUser;
+    final userId = user?.uid ?? '';
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
@@ -132,6 +143,10 @@ class HomePage extends StatelessWidget {
                   ],
                 ),
               ),
+              ElevatedButton(
+                onPressed: () => _goToPanier(context, userId),
+                child: const Text("Take me to Cart Page"),
+              )
             ],
           ),
         ),
@@ -161,6 +176,16 @@ void _goToFruitsCategoryPage(BuildContext context) {
   Navigator.push(
     context,
     MaterialPageRoute(builder: (context) => const FruitCategoryPage()),
+  );
+}
+
+void _goToPanier(BuildContext context) {
+  Navigator.push(
+    context,
+    MaterialPageRoute(
+        builder: (context) => CartPage(
+              userId: '',
+            )),
   );
 }
 
