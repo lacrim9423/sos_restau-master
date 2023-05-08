@@ -14,7 +14,6 @@ void main() async {
       messagingSenderId: '722566073390',
     ),
   );
-
   runApp(const SosRestau());
 }
 

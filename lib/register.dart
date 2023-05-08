@@ -65,6 +65,7 @@ class _RegisterPageState extends State<RegisterPage> {
           );
         }
         await firebaseFirestore.collection("users").doc(user.uid).set({
+          "userId": user.uid.trim(),
           "nom": _nomController.text.trim(),
           "email": _emailController.text.trim(),
           "phone": _phoneController.text.trim(),
@@ -73,10 +74,6 @@ class _RegisterPageState extends State<RegisterPage> {
           "adresse": _adresseController.text.trim(),
           "motdepasse": _motDePasseController.text.trim()
         });
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => const HomePage()),
-        );
       }
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
@@ -91,6 +88,10 @@ class _RegisterPageState extends State<RegisterPage> {
         print(e);
       }
     }
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const HomePage()),
+    );
   }
 
   bool passwordsMatch() {
