@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:sos_restau/class/produit.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-Future<void> addItemToCart(
-    String userId, String productName, int quantity, double price) async {
+Future<void> addItemToCart(String userId, String productName, int quantity,
+    double price, String image) async {
   if (quantity > 0) {
     try {
       final cartItemRef = FirebaseFirestore.instance
@@ -24,6 +24,7 @@ Future<void> addItemToCart(
           'name': productName,
           'quantity': quantity,
           'price': price,
+          'image': image,
         });
       }
       if (kDebugMode) {
@@ -133,6 +134,7 @@ class _ProductCardState extends State<ProductCard> {
                       widget.product.name,
                       _quantity,
                       widget.product.price,
+                      widget.product.image,
                     );
 
                     showFlash(

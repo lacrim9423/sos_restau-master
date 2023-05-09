@@ -1,128 +1,5 @@
-// import 'package:cloud_firestore/cloud_firestore.dart';
-// import 'package:flutter/material.dart';
-
-// class CartPage extends StatelessWidget {
-//   final String userId;
-
-//   const CartPage({Key? key, required this.userId}) : super(key: key);
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: const Text('Cart'),
-//       ),
-//       body: StreamBuilder<QuerySnapshot>(
-//         stream: FirebaseFirestore.instance
-//             .collection('users')
-//             .doc(userId)
-//             .collection('panier')
-//             .snapshots(),
-//         builder: (context, snapshot) {
-//           if (snapshot.hasError) {
-//             return Center(
-//               child: Text('Error: ${snapshot.error}'),
-//             );
-//           }
-
-//           if (snapshot.connectionState == ConnectionState.waiting) {
-//             return const Center(
-//               child: CircularProgressIndicator(),
-//             );
-//           }
-
-//           final cartItems = snapshot.data!.docs;
-
-//           if (cartItems.isEmpty) {
-//             return const Center(
-//               child: Text('Your cart is empty'),
-//             );
-//           }
-
-//           return ListView.builder(
-//             itemCount: cartItems.length,
-//             itemBuilder: (context, index) {
-//               final cartItem = cartItems[index];
-
-//               return ListTile(
-//                 title: Text(cartItem['name']),
-//                 subtitle:
-//                     Text('${cartItem['quantity']} x ${cartItem['price']}'),
-//               );
-//             },
-//           );
-//         },
-//       ),
-//     );
-//   }
-// }
-
-// // class CartPage extends StatelessWidget {
-// //   const CartPage({Key? key}) : super(key: key);
-
-// //   @override
-// //   Widget build(BuildContext context) {
-// //     final cart = Provider.of<Cart>(context);
-
-// //     return Scaffold(
-// //       appBar: AppBar(
-// //         title: const Text('Cart'),
-// //       ),
-// //       body: Column(
-// //         children: [
-// //           Expanded(
-// //             child: ListView.builder(
-// //               itemCount: cart.items.length,
-// //               itemBuilder: (context, index) {
-// //                 final cartItem = cart.items[index];
-
-// //                 return ListTile(
-// //                   title: Text(cartItem.name),
-// //                   subtitle: Text('\$${cartItem.price.toStringAsFixed(2)}'),
-// //                   trailing: SizedBox(
-// //                     width: 96,
-// //                     child: Row(
-// //                       children: [
-// //                         IconButton(
-// //                           onPressed: () => cart.addItem(cartItem),
-// //                           icon: const Icon(Icons.add),
-// //                         ),
-// //                         Text(cartItem.quantity.toString()),
-// //                         IconButton(
-// //                           onPressed: () => cart.removeItem(cartItem.ref),
-// //                           icon: const Icon(Icons.remove),
-// //                         ),
-// //                       ],
-// //                     ),
-// //                   ),
-// //                 );
-// //               },
-// //             ),
-// //           ),
-// //           const SizedBox(height: 16),
-// //           Row(
-// //             mainAxisAlignment: MainAxisAlignment.end,
-// //             children: [
-// //               Text(
-// //                 'Total: \$${cart.totalPrice.toStringAsFixed(2)}',
-// //                 style: Theme.of(context).textTheme.subtitle1,
-// //               ),
-// //               const SizedBox(width: 16),
-// //               ElevatedButton(
-// //                 onPressed: () {
-// //                   // TODO: Implement cart validation logic
-// //                 },
-// //                 child: const Text('Validate Cart'),
-// //               ),
-// //               const SizedBox(width: 16),
-// //             ],
-// //           ),
-// //         ],
-// //       ),
-// //     );
-// //   }
-// // }
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class CartPage extends StatelessWidget {
@@ -130,7 +7,6 @@ class CartPage extends StatelessWidget {
 
   const CartPage({Key? key, required this.userId}) : super(key: key);
 
-  @override
   void _incrementQuantity(String cartItemId) {
     FirebaseFirestore.instance
         .collection('users')
@@ -158,10 +34,62 @@ class CartPage extends StatelessWidget {
         .delete();
   }
 
-  void _validateCart() {
-    // TODO: Implement the cart validation logic
+  Future<void> validateCart(String userId) async {
+  final userRef = FirebaseFirestore.instance.collection('users').doc(userId);
+  final userSnapshot = await userRef.get();
+  final restaurantName = userSnapshot.get('restaurant');
+  final restaurantAddress = userSnapshot.get('adresse');
+  final userName = userSnapshot.get('nom');
+
+  final cartItemsRef = userRef.collection('panier');
+  final cartItems = await cartItemsRef.get();
+
+  final commandesRef = userRef.collection('commandes');
+  final facturesRef = userRef.collection('factures');
+
+  final batch = FirebaseFirestore.instance.batch();
+
+  for (final cartItem in cartItems.docs) {
+    final name = cartItem.get('name');
+    final price = cartItem.get('price');
+    final quantity = cartItem.get('quantity');
+
+    final commandeData = {
+      'name': name,
+      'price': price,
+      'quantity': quantity,
+      'restaurantName': restaurantName,
+      'restaurantAddress': restaurantAddress,
+      'userName': userName,
+    };
+    batch.set(commandesRef.doc(name), commandeData);
+
+    final factureData = {
+      'name': name,
+      'price': price,
+      'quantity': quantity,
+      'userName': userName,
+      'restaurantName': restaurantName,
+    };
+    batch.set(facturesRef.doc(name), factureData);
+
+    batch.delete(cartItemsRef.doc(name));
   }
 
+  try {
+    await batch.commit();
+    if (kDebugMode) {
+      print('Cart validated successfully.');
+    }
+  } catch (e) {
+    if (kDebugMode) {
+      print('Error validating cart: $e');
+    }
+  }
+}
+
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -213,11 +141,12 @@ class CartPage extends StatelessWidget {
                               children: [
                                 Text(
                                   cartItem['name'],
-                                  style: Theme.of(context).textTheme.subtitle1,
+                                  style:
+                                      Theme.of(context).textTheme.titleMedium,
                                 ),
                                 Text(
                                   'Price: ${cartItem['price']}',
-                                  style: Theme.of(context).textTheme.caption,
+                                  style: Theme.of(context).textTheme.bodySmall,
                                 ),
                                 const SizedBox(height: 8),
                                 Row(
@@ -259,7 +188,7 @@ class CartPage extends StatelessWidget {
                   children: [
                     Text(
                       'Total price:',
-                      style: Theme.of(context).textTheme.subtitle1,
+                      style: Theme.of(context).textTheme.titleMedium,
                     ),
                     const SizedBox(height: 8),
                     StreamBuilder<DocumentSnapshot>(
@@ -279,14 +208,14 @@ class CartPage extends StatelessWidget {
 
                         return Text(
                           '\$$totalPrice',
-                          style: Theme.of(context).textTheme.headline6,
+                          style: Theme.of(context).textTheme.titleLarge,
                         );
                       },
                     ),
                     const SizedBox(height: 16),
                     ElevatedButton(
                       onPressed: () {
-                        _validateCart();
+                        validateCart(userId);
                       },
                       child: const Text('Validate Cart'),
                     ),
