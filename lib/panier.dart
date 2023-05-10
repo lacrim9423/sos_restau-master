@@ -1,22 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:pdf/pdf.dart';
-import 'package:sos_restau/factures/creer_facture.dart';
 import 'dart:io';
-import 'dart:typed_data';
-import 'dart:io';
-import 'dart:typed_data';
 
-import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:path_provider/path_provider.dart';
-import 'package:flutter/services.dart' show rootBundle;
 
 class CartPage extends StatelessWidget {
   final String userId;
 
-  CartPage({Key? key, required this.userId}) : super(key: key);
+  const CartPage({Key? key, required this.userId}) : super(key: key);
 
   void _incrementQuantity(String cartItemId) {
     FirebaseFirestore.instance

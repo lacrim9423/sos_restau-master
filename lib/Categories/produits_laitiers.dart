@@ -11,8 +11,6 @@ class DairyCategoryPage extends StatefulWidget {
 }
 
 class _DairyCategoryPageState extends State<DairyCategoryPage> {
-  int _quantity = 0;
-
   // final List<DairyProduct> _dairyProducts = [
   //    const DairyProduct(
   //     id: '1',

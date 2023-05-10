@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+// ignore: unused_import
 import 'package:sos_restau/factures/factures_page.dart';
 import 'package:sos_restau/factures/pdf_viewer.dart';
 
@@ -7,7 +8,7 @@ class InvoiceCard extends StatelessWidget {
   final QueryDocumentSnapshot<Object?> invoice;
   final String userId;
 
-  InvoiceCard({required this.invoice, required this.userId});
+  const InvoiceCard({super.key, required this.invoice, required this.userId});
 
   @override
   Widget build(BuildContext context) {

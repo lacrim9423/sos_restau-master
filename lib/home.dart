@@ -189,16 +189,6 @@ void _goToFruitsCategoryPage(BuildContext context) {
   );
 }
 
-void _goToPanier(BuildContext context) {
-  Navigator.push(
-    context,
-    MaterialPageRoute(
-        builder: (context) => CartPage(
-              userId: '',
-            )),
-  );
-}
-
 void _goToCommandes(BuildContext context, String userId) {
   Navigator.push(
     context,
