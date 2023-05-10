@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import '../class/meat.dart';
-import '../models/meat_card.dart';
+import 'package:sos_restau/models/product_card.dart';
+import '../class/produit.dart';
 
 class MeatCategoryPage extends StatelessWidget {
-  final List<MeatProduct> meats = [
-    const MeatProduct(
+  final List<Product> meats = [
+    Product(
       id: '1',
       name: 'Burger',
       description: 'Burger de boeuf grillé, garni de fromage et de légumes.',
@@ -12,7 +12,7 @@ class MeatCategoryPage extends StatelessWidget {
       price: 4.99,
       available: true,
     ),
-    const MeatProduct(
+    Product(
       id: '2',
       name: 'Poulet',
       description: 'Poulet grillé, accompagné de riz et de légumes.',
@@ -20,7 +20,7 @@ class MeatCategoryPage extends StatelessWidget {
       price: 6.99,
       available: true,
     ),
-    const MeatProduct(
+    Product(
       id: '3',
       name: 'Cuisse de poulet',
       description: 'Cuisse de poulet grillée, accompagnée de frites.',
@@ -28,7 +28,7 @@ class MeatCategoryPage extends StatelessWidget {
       price: 3.99,
       available: true,
     ),
-    const MeatProduct(
+    Product(
       id: '4',
       name: 'Escalope de poulet',
       description: 'Escalope de poulet panée, accompagnée de salade.',
@@ -36,7 +36,7 @@ class MeatCategoryPage extends StatelessWidget {
       price: 5.99,
       available: true,
     ),
-    const MeatProduct(
+    Product(
       id: '5',
       name: 'Nuggets',
       description: 'Nuggets de poulet croustillants, accompagnés de sauce.',
@@ -44,7 +44,7 @@ class MeatCategoryPage extends StatelessWidget {
       price: 2.99,
       available: true,
     ),
-    const MeatProduct(
+    Product(
       id: '6',
       name: 'Escalope de dinde',
       description: 'Escalope de dinde grillée, accompagnée de légumes.',
@@ -72,9 +72,14 @@ class MeatCategoryPage extends StatelessWidget {
         ),
         itemCount: meats.length,
         itemBuilder: (context, index) {
-          return MeatCard(
-            meat: meats[index],
-            onQuantityChanged: (quantity) {},
+          final product = meats[index];
+          return ProductCard(
+            product: product,
+            title: product.name,
+            description: product.description,
+            imageUrl: product.image,
+            price: product.price,
+            available: product.available,
           );
         },
       ),

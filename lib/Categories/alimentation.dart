@@ -12,50 +12,56 @@ class GroceryCategoryPage extends StatefulWidget {
 }
 
 class _GroceryCategoryPageState extends State<GroceryCategoryPage> {
-  List<Product> groceryProducts = [];
-  //   Product(
-  //     name: 'Pasta',
-  //     image: 'assets/images/pasta.jpg',
-  //     price: 2.99,
-  //     available: true,
-  //     description: '',
-  //   ),
-  //   Product(
-  //     name: 'Rice',
-  //     image: 'assets/images/rice.jpg',
-  //     price: 1.99,
-  //     available: true,
-  //     description: '',
-  //   ),
-  //   Product(
-  //     name: 'Cereal',
-  //     image: 'assets/images/cereal.jpg',
-  //     price: 3.49,
-  //     available: false,
-  //     description: '',
-  //   ),
-  //   Product(
-  //     name: 'Bread',
-  //     image: 'assets/images/bread.jpg',
-  //     price: 1.49,
-  //     available: true,
-  //     description: '',
-  //   ),
-  //   Product(
-  //     name: 'Milk',
-  //     image: 'assets/images/milk.jpg',
-  //     price: 2.99,
-  //     available: true,
-  //     description: '',
-  //   ),
-  //   Product(
-  //     name: 'Cheese',
-  //     image: 'assets/images/cheese.jpg',
-  //     price: 4.99,
-  //     available: true,
-  //     description: '',
-  //   ),
-  // ];
+  List<Product> groceryProducts = [
+    Product(
+      id: "1",
+      name: 'Pasta',
+      image: 'assets/images/pasta.jpg',
+      price: 2.99,
+      available: true,
+      description: '',
+    ),
+    Product(
+      id: "2",
+      name: 'Rice',
+      image: 'assets/images/rice.jpg',
+      price: 1.99,
+      available: true,
+      description: '',
+    ),
+    Product(
+      id: "3",
+      name: 'Cereal',
+      image: 'assets/images/cereal.jpg',
+      price: 3.49,
+      available: false,
+      description: '',
+    ),
+    Product(
+      id: "4",
+      name: 'Bread',
+      image: 'assets/images/bread.jpg',
+      price: 1.49,
+      available: true,
+      description: '',
+    ),
+    Product(
+      id: "5",
+      name: 'Milk',
+      image: 'assets/images/milk.jpg',
+      price: 2.99,
+      available: true,
+      description: '',
+    ),
+    Product(
+      id: "6",
+      name: 'Cheese',
+      image: 'assets/images/cheese.jpg',
+      price: 4.99,
+      available: true,
+      description: '',
+    ),
+  ];
 
   @override
   Widget build(BuildContext context) {
