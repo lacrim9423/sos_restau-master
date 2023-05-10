@@ -31,7 +31,7 @@ dependencies:
   flutter:
     sdk: flutter
   pdf: ^3.6.0
-
+ 
 
   flash: ^2.0.3
  
@@ -43,6 +43,8 @@ dependencies:
   firebase_core: ^2.11.0
   firebase_auth: ^4.5.0
   cloud_firestore: ^4.6.0
+  path_provider: ^2.0.15
+  flutter_full_pdf_viewer: ^1.0.6
 
 dev_dependencies:
   flutter_test:

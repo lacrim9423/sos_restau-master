@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:sos_restau/Categories/produits_laitiers.dart';
 import 'package:sos_restau/Categories/alimentation.dart';
 import 'package:sos_restau/Categories/boissons.dart';
+import 'package:sos_restau/factures/factures_page.dart';
+import 'package:sos_restau/historique/historique_commandes.dart';
 import 'package:sos_restau/panier.dart';
 import 'Categories/hygiene.dart';
 import 'package:sos_restau/Categories/pain_c.dart';
@@ -146,6 +148,14 @@ class HomePage extends StatelessWidget {
               ElevatedButton(
                 onPressed: () => _goToPanier(context, userId),
                 child: const Text("Take me to Cart Page"),
+              ),
+              ElevatedButton(
+                onPressed: () => _goToFactures(context, userId),
+                child: const Text("Take me to Factures Page"),
+              ),
+              ElevatedButton(
+                onPressed: () => _goToCommandes(context, userId),
+                child: const Text("Take me to Commandes Page"),
               )
             ],
           ),
@@ -184,6 +194,26 @@ void _goToPanier(BuildContext context) {
     context,
     MaterialPageRoute(
         builder: (context) => CartPage(
+              userId: '',
+            )),
+  );
+}
+
+void _goToCommandes(BuildContext context, String userId) {
+  Navigator.push(
+    context,
+    MaterialPageRoute(
+        builder: (context) => const CommandesPage(
+              userId: '',
+            )),
+  );
+}
+
+void _goToFactures(BuildContext context, String userId) {
+  Navigator.push(
+    context,
+    MaterialPageRoute(
+        builder: (context) => const InvoicesPage(
               userId: '',
             )),
   );
