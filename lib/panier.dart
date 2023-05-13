@@ -1,10 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:pdf/pdf.dart';
-import 'dart:io';
-
-import 'package:pdf/widgets.dart' as pw;
-import 'package:path_provider/path_provider.dart';
 
 class CartPage extends StatelessWidget {
   final String userId;
@@ -38,124 +33,6 @@ class CartPage extends StatelessWidget {
         .delete();
   }
 
-  // Future<void> validateCart(String userId) async {
-  //   final userRef = FirebaseFirestore.instance.collection('users').doc(userId);
-  //   final cartItems = await userRef.collection('panier').get();
-
-  //   if (cartItems.docs.isEmpty) {
-  //     return;
-  //   }
-
-  //   final commandesRef = userRef.collection('commandes').doc();
-  //   final facturesRef = userRef.collection('factures').doc();
-
-  //   final validatedCart = cartItems.docs.map((cartItem) {
-  //     final productName = cartItem.get('name');
-  //     final quantity = cartItem.get('quantity');
-  //     final price = cartItem.get('price');
-  //     final total = quantity * price;
-
-  //     return {
-  //       'name': productName,
-  //       'quantity': quantity,
-  //       'price': price,
-  //       'total': total,
-  //     };
-  //   }).toList();
-
-  //   final user = await userRef.get();
-  //   final restaurantName = user.get('restaurant');
-  //   final address = user.get('adresse');
-  //   final userName = user.get('nom');
-  //   final timestamp = DateTime.now().toUtc().millisecondsSinceEpoch;
-
-  //   await commandesRef.set({
-  //     'restaurant': restaurantName,
-  //     'adresse': address,
-  //     'nom': userName,
-  //     'timestamp': timestamp,
-  //     'items': validatedCart,
-  //   });
-
-  //   await facturesRef.set({
-  //     'nom': userName,
-  //     'restaurant': restaurantName,
-  //     'timestamp': timestamp,
-  //     'items': validatedCart,
-  //   });
-
-  //   final batch = FirebaseFirestore.instance.batch();
-
-  //   for (final cartItem in cartItems.docs) {
-  //     batch.delete(cartItem.reference);
-  //   }
-
-  //   await batch.commit();
-  // }
-// Future<void> validateCart(String userId) async {
-//   final userRef = FirebaseFirestore.instance.collection('users').doc(userId);
-//   final cartItems = await userRef.collection('panier').get();
-
-//   if (cartItems.docs.isEmpty) {
-//     return;
-//   }
-
-//   final commandesRef = userRef.collection('commandes').doc();
-//   final facturesRef = userRef.collection('factures').doc();
-
-//   final validatedCart = cartItems.docs.map((cartItem) {
-//     final productName = cartItem.get('name');
-//     final quantity = cartItem.get('quantity');
-//     final price = cartItem.get('price');
-//     final total = quantity * price;
-
-//     return {
-//       'name': productName,
-//       'quantity': quantity,
-//       'price': price,
-//       'total': total,
-//     };
-//   }).toList();
-
-//   final user = await userRef.get();
-//   final restaurantName = user.get('restaurant');
-//   final address = user.get('adresse');
-//   final userName = user.get('nom');
-//   final timestamp = DateTime.now().toUtc().millisecondsSinceEpoch;
-
-//   final invoiceFile = await generateInvoice(
-//       userName, restaurantName, address, commandesRef.id, timestamp.toString(),
-//       validatedCart.map((item) => item['name'] as String).toList(),
-//       validatedCart.map((item) => item['quantity'] as int).toList(),
-//       validatedCart.map((item) => item['total'] as double).toList());
-
-//   final invoiceUrl = await uploadInvoiceToFirebaseStorage(invoiceFile);
-
-//   await commandesRef.set({
-//     'restaurant': restaurantName,
-//     'adresse': address,
-//     'nom': userName,
-//     'timestamp': timestamp,
-//     'items': validatedCart,
-//   });
-
-//   await facturesRef.set({
-//     'nom': userName,
-//     'restaurant': restaurantName,
-//     'timestamp': timestamp,
-//     'items': validatedCart,
-//     'url': invoiceUrl,
-//   });
-
-//   final batch = FirebaseFirestore.instance.batch();
-
-//   for (final cartItem in cartItems.docs) {
-//     batch.delete(cartItem.reference);
-//   }
-
-//   await batch.commit();
-// }
-
   Future<void> validateCart(String userId) async {
     final userRef = FirebaseFirestore.instance.collection('users').doc(userId);
     final cartItems = await userRef.collection('panier').get();
@@ -163,6 +40,9 @@ class CartPage extends StatelessWidget {
     if (cartItems.docs.isEmpty) {
       return;
     }
+
+    final commandesRef = userRef.collection('commandes').doc();
+    final facturesRef = userRef.collection('factures').doc();
 
     final validatedCart = cartItems.docs.map((cartItem) {
       final productName = cartItem.get('name');
@@ -184,70 +64,6 @@ class CartPage extends StatelessWidget {
     final userName = user.get('nom');
     final timestamp = DateTime.now().toUtc().millisecondsSinceEpoch;
 
-    final pdf = pw.Document();
-    pdf.addPage(
-      pw.MultiPage(
-        pageFormat: PdfPageFormat.a4,
-        build: (pw.Context context) {
-          return [
-            pw.Center(
-              child: pw.Text(
-                'Invoice',
-                style:
-                    pw.TextStyle(fontSize: 30, fontWeight: pw.FontWeight.bold),
-              ),
-            ),
-            pw.SizedBox(height: 20),
-            pw.Table.fromTextArray(
-              headers: [
-                'numéro',
-                'désignation',
-                'prix unitaire',
-                'quantité',
-                'prix total'
-              ],
-              data: validatedCart
-                  .map((item) => [
-                        item['name'],
-                        item['price'],
-                        item['quantity'],
-                        item['total']
-                      ])
-                  .toList(),
-            ),
-            pw.SizedBox(height: 20),
-            pw.Row(
-              mainAxisAlignment: pw.MainAxisAlignment.end,
-              children: [
-                pw.Text(
-                    'Total: ${validatedCart.fold<double>(0, (total, item) => total + item['total'])}'),
-              ],
-            ),
-            pw.SizedBox(height: 20),
-            pw.Text('Restaurant: $restaurantName'),
-            pw.SizedBox(height: 10),
-            pw.Text('Address: $address'),
-            pw.SizedBox(height: 10),
-            pw.Text('Name: $userName'),
-            pw.SizedBox(height: 10),
-            pw.Text('Timestamp: $timestamp'),
-          ];
-        },
-      ),
-    );
-
-    final output = await getTemporaryDirectory();
-    final file = File('${output.path}/invoice_$timestamp.pdf');
-    await file.writeAsBytes(await pdf.save());
-
-    final batch = FirebaseFirestore.instance.batch();
-    final commandesRef = userRef.collection('commandes').doc();
-    final facturesRef = userRef.collection('factures').doc();
-
-    for (final cartItem in cartItems.docs) {
-      batch.delete(cartItem.reference);
-    }
-
     await commandesRef.set({
       'restaurant': restaurantName,
       'adresse': address,
@@ -260,8 +76,14 @@ class CartPage extends StatelessWidget {
       'nom': userName,
       'restaurant': restaurantName,
       'timestamp': timestamp,
-      'file_path': file.path, // add the file path to the facture document
+      'items': validatedCart,
     });
+
+    final batch = FirebaseFirestore.instance.batch();
+
+    for (final cartItem in cartItems.docs) {
+      batch.delete(cartItem.reference);
+    }
 
     await batch.commit();
   }
