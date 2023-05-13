@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:sos_restau/generer_facture.dart';
 
 class CartPage extends StatelessWidget {
   final String userId;
@@ -77,6 +78,7 @@ class CartPage extends StatelessWidget {
       'restaurant': restaurantName,
       'timestamp': timestamp,
       'items': validatedCart,
+      'paid': false,
     });
 
     final batch = FirebaseFirestore.instance.batch();
@@ -84,6 +86,7 @@ class CartPage extends StatelessWidget {
     for (final cartItem in cartItems.docs) {
       batch.delete(cartItem.reference);
     }
+    // await generateInvoice(userId);
 
     await batch.commit();
   }

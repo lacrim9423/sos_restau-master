@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sos_restau/Categories/produits_laitiers.dart';
 import 'package:sos_restau/Categories/alimentation.dart';
 import 'package:sos_restau/Categories/boissons.dart';
+import 'package:sos_restau/factures.dart';
 import 'package:sos_restau/historique.dart';
 import 'package:sos_restau/panier.dart';
 import 'Categories/hygiene.dart';
@@ -198,7 +199,15 @@ void _goToCommandes(BuildContext context, String userId) {
   );
 }
 
-void _goToFactures(BuildContext context, String userId) {}
+void _goToFactures(BuildContext context, String userId) {
+  Navigator.push(
+    context,
+    MaterialPageRoute(
+        builder: (context) => InvoicePage(
+              userId: userId,
+            )),
+  );
+}
 
 void _goToBreadCategoryPage(BuildContext context) {
   Navigator.push(

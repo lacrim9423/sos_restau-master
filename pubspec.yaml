@@ -44,7 +44,11 @@ dependencies:
   firebase_auth: ^4.5.0
   cloud_firestore: ^4.6.0
   path_provider: ^2.0.15
-  flutter_full_pdf_viewer: ^1.0.6
+  open_file: ^3.3.1
+  mega: ^0.1.8
+  intl: ^0.18.1
+  firebase_storage: ^11.2.0
+  webview_flutter: ^4.2.0
 
 dev_dependencies:
   flutter_test:
