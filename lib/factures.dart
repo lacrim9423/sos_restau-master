@@ -1,7 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:sos_restau/generer_facture.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:url_launcher/url_launcher.dart';
 
 class Invoice {
   final double total;
@@ -19,6 +20,13 @@ class InvoicePage extends StatelessWidget {
   final String userId;
 
   const InvoicePage({Key? key, required this.userId}) : super(key: key);
+
+  Future<String> _getInvoiceUrl() async {
+    String downloadURL = await firebase_storage.FirebaseStorage.instance
+        .ref('Invoice.pdf')
+        .getDownloadURL();
+    return downloadURL;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -102,7 +110,14 @@ class InvoicePage extends StatelessWidget {
                     ),
                     const SizedBox(height: 10),
                     ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () async {
+                        String invoiceUrl = await _getInvoiceUrl();
+                        if (await canLaunchUrl(invoiceUrl as Uri)) {
+                          await launchUrl(invoiceUrl as Uri);
+                        } else {
+                          throw 'Could not launch $invoiceUrl';
+                        }
+                      },
                       child: const Text('Facture'),
                     ),
                   ],

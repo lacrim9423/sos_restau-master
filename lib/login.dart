@@ -23,26 +23,65 @@ class _LoginPageState extends State<LoginPage> {
         email: _emailController.text.trim(),
         password: _motDePasseController.text.trim(),
       );
+      // navigate to home page if sign in succeeds
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => const HomePage()),
+      );
     } on FirebaseAuthException catch (e) {
+      String errorMessage;
       if (e.code == 'user-not-found') {
-        if (kDebugMode) {
-          print('No user found for that email.');
-        }
-        // Display an error message to the user
+        errorMessage = 'No user found for that email.';
       } else if (e.code == 'wrong-password') {
-        if (kDebugMode) {
-          print('Wrong password provided for that user.');
-        }
-        // Display an error message to the user
+        errorMessage = 'Wrong password provided for that user.';
+      } else {
+        errorMessage = 'Error occurred while signing in: $e';
       }
+      if (kDebugMode) {
+        print(errorMessage);
+      }
+      // Show an alert dialog with error message
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('Error'),
+          content: Text(errorMessage),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                // Empty the email and password fields
+                _emailController.clear();
+                _motDePasseController.clear();
+                Navigator.of(context).pop();
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        ),
+      );
     } catch (e) {
       if (kDebugMode) {
         print('Error occurred while signing in: $e');
       }
-      // Display an error message to the user
+      // Show an alert dialog with error message
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('Error'),
+          content: Text('Error occurred while signing in: $e'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                // Empty the email and password fields
+                _emailController.clear();
+                _motDePasseController.clear();
+                Navigator.of(context).pop();
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        ),
+      );
     }
-    Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => const HomePage()));
   }
 
   @override

@@ -12,6 +12,7 @@ void main() async {
       projectId: "sos-restau-a50ff",
       appId: '1:722566073390:android:f0ddedf84fbe12afce63bf',
       messagingSenderId: '722566073390',
+      storageBucket: "sos-restau-a50ff.appspot.com",
     ),
   );
   runApp(const SosRestau());
