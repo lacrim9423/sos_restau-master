@@ -40,7 +40,7 @@ class _PhoneVerificationPageState extends State<PhoneVerificationPage> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const HomePage()),
+                  MaterialPageRoute(builder: (context) => HomePage()),
                 );
               },
               child: const Text('OK'),

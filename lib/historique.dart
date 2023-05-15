@@ -19,7 +19,7 @@ class OrderHistoryPage extends StatelessWidget {
   void _goToHome(BuildContext context, String userId) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => const HomePage()),
+      MaterialPageRoute(builder: (context) => HomePage()),
     );
   }
 

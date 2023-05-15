@@ -1,5 +1,8 @@
 // ignore_for_file: library_private_types_in_public_api
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:sos_restau/class/meat.dart';
 import 'package:flash/flash.dart';
@@ -91,6 +94,18 @@ class _MeatCardState extends State<MeatCard> {
           const SizedBox(height: 10),
           ElevatedButton(
             onPressed: () {
+              // Get the current user ID.
+              final currentUser = FirebaseAuth.instance.currentUser;
+              final userId = currentUser != null ? currentUser.uid : '';
+
+              // Call the addItemToCart function with the necessary arguments.
+              addItemToCart(
+                userId,
+                widget.meat.name,
+                _quantity,
+                widget.meat.price,
+                widget.meat.image,
+              );
               showFlash(
                 context: context,
                 duration: const Duration(seconds: 2),
@@ -125,5 +140,38 @@ class _MeatCardState extends State<MeatCard> {
         ],
       ),
     );
+  }
+}
+
+Future<void> addItemToCart(String userId, String productName, int quantity,
+    double price, String image) async {
+  if (quantity > 0) {
+    try {
+      final cartItemRef = FirebaseFirestore.instance
+          .collection('users')
+          .doc(userId)
+          .collection('panier')
+          .doc(productName);
+      final cartItem = await cartItemRef.get();
+
+      if (cartItem.exists) {
+        final int currentQuantity = cartItem.get('quantity');
+        await cartItemRef.update({'quantity': currentQuantity + quantity});
+      } else {
+        await cartItemRef.set({
+          'name': productName,
+          'quantity': quantity,
+          'price': price,
+          'image': image,
+        });
+      }
+      if (kDebugMode) {
+        print('Added $quantity $productName to cart.');
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error adding item to cart: $e');
+      }
+    }
   }
 }

@@ -1,6 +1,7 @@
 // ignore_for_file: library_private_types_in_public_api
 
 import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:flutter/material.dart';
 import 'package:sos_restau/models/product_card.dart';
 import 'package:sos_restau/class/produit.dart';
@@ -61,7 +62,7 @@ class _FruitCategoryPageState extends State<FruitCategoryPage> {
   void _goToHome(BuildContext context, String userId) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => const HomePage()),
+      MaterialPageRoute(builder: (context) => HomePage()),
     );
   }
 

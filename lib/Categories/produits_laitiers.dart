@@ -26,7 +26,7 @@ class _DairyCategoryPageState extends State<DairyCategoryPage> {
   void _goToHome(BuildContext context, String userId) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => const HomePage()),
+      MaterialPageRoute(builder: (context) => HomePage()),
     );
   }
 
@@ -44,39 +44,6 @@ class _DairyCategoryPageState extends State<DairyCategoryPage> {
     );
   }
 
-  // final List<DairyProduct> _dairyProducts = [
-  //    const DairyProduct(
-  //     id: '1',
-  //     name: 'Lait écrémé',
-  //     description: 'Lait demi-écrémé, idéal pour un petit déjeuner équilibré.',
-  //     image: 'assets/images/milk.png',
-  //     price: 0.99,
-  //     available: true,
-  //     units: ['L', 'ml'],
-  //     isLiquid: true,
-  //   ),
-  //   const DairyProduct(
-  //     id: '2',
-  //     name: 'Fromage de chèvre',
-  //     description: 'Fromage de chèvre frais, parfait pour vos salades.',
-  //     image: 'assets/images/goat_cheese.png',
-  //     price: 3.99,
-  //     available: true,
-  //     units: [Unit.gram, Unit.kilogram],
-  //     isLiquid: false,
-  //   ),
-  //   const DairyProduct(
-  //     id: '3',
-  //     name: 'Sauce au fromage',
-  //     description:
-  //         'Sauce onctueuse à base de fromage, idéale pour vos plats de pâtes.',
-  //     image: 'assets/images/cheese_sauce.png',
-  //     price: 2.49,
-  //     available: false,
-  //     units: ['g', 'kg'],
-  //     isLiquid: false,
-  //   ),
-  // ];
   final List<DairyProduct> _dairyProducts = [
     const DairyProduct(
       id: '1',
@@ -85,7 +52,9 @@ class _DairyCategoryPageState extends State<DairyCategoryPage> {
       image: 'assets/images/milk.png',
       price: 0.99,
       available: true,
-      units: [Unit.liter, Unit.milliliter],
+      units: [
+        Unit.pack,
+      ],
       isLiquid: true,
     ),
     const DairyProduct(
@@ -95,7 +64,7 @@ class _DairyCategoryPageState extends State<DairyCategoryPage> {
       image: 'assets/images/goat_cheese.png',
       price: 3.99,
       available: true,
-      units: [Unit.gram, Unit.kilogram],
+      units: [Unit.kilogram],
       isLiquid: false,
     ),
     const DairyProduct(
@@ -106,8 +75,62 @@ class _DairyCategoryPageState extends State<DairyCategoryPage> {
       image: 'assets/images/cheese_sauce.png',
       price: 2.49,
       available: false,
-      units: [Unit.gram, Unit.kilogram],
+      units: [Unit.kilogram],
       isLiquid: false,
+    ),
+    const DairyProduct(
+      id: '4',
+      name: 'Yaourt nature',
+      description:
+          'Yaourt nature onctueux, parfait pour accompagner vos fruits.',
+      image: 'assets/images/yogurt.png',
+      price: 1.49,
+      available: true,
+      units: [Unit.pack],
+      isLiquid: true,
+    ),
+    const DairyProduct(
+      id: '5',
+      name: 'Beurre doux',
+      description:
+          'Beurre doux de qualité, idéal pour vos préparations culinaires.',
+      image: 'assets/images/butter.png',
+      price: 2.99,
+      available: true,
+      units: [Unit.pack],
+      isLiquid: false,
+    ),
+    const DairyProduct(
+      id: '6',
+      name: 'Crème fraîche',
+      description:
+          'Crème fraîche épaisse, parfaite pour vos sauces et desserts.',
+      image: 'assets/images/cream.png',
+      price: 1.79,
+      available: true,
+      units: [Unit.pack],
+      isLiquid: false,
+    ),
+    const DairyProduct(
+      id: '7',
+      name: 'Fromage blanc',
+      description: 'Fromage blanc crémeux, idéal pour vos recettes légères.',
+      image: 'assets/images/cottage_cheese.png',
+      price: 2.29,
+      available: true,
+      units: [Unit.pack],
+      isLiquid: true,
+    ),
+    const DairyProduct(
+      id: '8',
+      name: 'Crème glacée vanille',
+      description:
+          'Délicieuse crème glacée à la vanille, parfait pour se rafraîchir.',
+      image: 'assets/images/ice_cream.png',
+      price: 4.49,
+      available: true,
+      units: [Unit.pack],
+      isLiquid: true,
     ),
   ];
 
@@ -169,24 +192,4 @@ class _DairyCategoryPageState extends State<DairyCategoryPage> {
           ),
         ));
   }
-  // @override
-  // Widget build(BuildContext context) {
-  //   return Scaffold(
-  //     appBar: AppBar(
-  //       title: const Text('Produits laitiers'),
-  //     ),
-  //     body: Padding(
-  //       padding: const EdgeInsets.all(16.0),
-  //       child: ListView.builder(
-  //         itemCount: _dairyProducts.length,
-  //         itemBuilder: (context, index) {
-  //           final dairyProduct = _dairyProducts[index];
-  //           return DairyProductCard(
-  //             product: dairyProduct,
-  //           );
-  //         },
-  //       ),
-  //     ),
-  //   );
-  // }
 }

@@ -1,6 +1,8 @@
 // ignore_for_file: library_private_types_in_public_api
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:sos_restau/class/produit.dart';
 import 'package:flash/flash.dart';
@@ -8,6 +10,8 @@ import 'package:sos_restau/historique.dart';
 import 'package:sos_restau/home.dart';
 import 'package:sos_restau/panier.dart';
 import 'package:sos_restau/profile.dart';
+
+import '../models/product_card.dart';
 
 class GroceryCategoryPage extends StatefulWidget {
   const GroceryCategoryPage({Key? key}) : super(key: key);
@@ -27,7 +31,7 @@ class _GroceryCategoryPageState extends State<GroceryCategoryPage> {
   void _goToHome(BuildContext context, String userId) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => const HomePage()),
+      MaterialPageRoute(builder: (context) => HomePage()),
     );
   }
 
@@ -251,6 +255,18 @@ class _ProductCardState extends State<ProductCard> {
                 const SizedBox(height: 10),
                 ElevatedButton(
                   onPressed: () {
+                    // Get the current user ID.
+                    final currentUser = FirebaseAuth.instance.currentUser;
+                    final userId = currentUser != null ? currentUser.uid : '';
+
+                    // Call the addItemToCart function with the necessary arguments.
+                    addItemToCart(
+                      userId,
+                      widget.product.name,
+                      _quantity,
+                      widget.product.price,
+                      widget.product.image,
+                    );
                     showFlash(
                       context: context,
                       duration: const Duration(seconds: 2),

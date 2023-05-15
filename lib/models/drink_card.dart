@@ -1,4 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flash/flash.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:sos_restau/class/drink.dart';
 
@@ -23,115 +26,6 @@ class DrinkCard extends StatefulWidget {
 class _DrinkCardState extends State<DrinkCard> {
   int _quantity = 0;
   String? _selectedFlavor;
-
-  // @override
-  // Widget build(BuildContext context) {
-  //   return Card(
-  //     child: Column(
-  //       crossAxisAlignment: CrossAxisAlignment.stretch,
-  //       children: [
-  //         Image.asset(
-  //           widget.drink.image,
-  //           fit: BoxFit.cover,
-  //           height: 150.0,
-  //         ),
-  //         Padding(
-  //           padding: const EdgeInsets.all(16.0),
-  //           child: Column(
-  //             crossAxisAlignment: CrossAxisAlignment.start,
-  //             children: [
-  //               Text(
-  //                 widget.drink.name,
-  //                 style: const TextStyle(
-  //                   fontSize: 20.0,
-  //                   fontWeight: FontWeight.bold,
-  //                 ),
-  //               ),
-  //               const SizedBox(height: 8.0),
-  //               Text(
-  //                 widget.drink.description,
-  //                 style: const TextStyle(
-  //                   fontSize: 16.0,
-  //                 ),
-  //               ),
-  //               const SizedBox(height: 16.0),
-  //               Text(
-  //                 '\$${widget.drink.price.toStringAsFixed(2)}',
-  //                 style: const TextStyle(
-  //                   fontSize: 20.0,
-  //                   fontWeight: FontWeight.bold,
-  //                 ),
-  //               ),
-  //               const SizedBox(height: 16.0),
-  //               if (widget.drink.flavors.isNotEmpty) ...[
-  //                 DropdownButton<Flavor>(
-  //                   value: _selectedFlavor != null
-  //                       ? widget.drink.flavors.firstWhere(
-  //                           (flavor) => flavor.id == _selectedFlavor!,
-  //                           orElse: () => const Flavor(
-  //                             id: '',
-  //                             name: '',
-  //                           ),
-  //                         )
-  //                       : null,
-  //                   hint: const Text('Choisissez un parfum'),
-  //                   items: widget.drink.flavors
-  //                       .map((flavor) => DropdownMenuItem<Flavor>(
-  //                             value: flavor,
-  //                             child: Text(flavor.name),
-  //                           ))
-  //                       .toList(),
-  //                   onChanged: (value) {
-  //                     setState(() {
-  //                       _selectedFlavor = value?.id;
-  //                     });
-  //                   },
-  //                 ),
-  //                 const SizedBox(height: 16.0),
-  //               ],
-  //               ElevatedButton(
-  //                 onPressed: widget.drink.available
-  //                     ? () {
-  //                         showFlash(
-  //                           context: context,
-  //                           duration: const Duration(seconds: 2),
-  //                           builder: (_, controller) {
-  //                             return Flash(
-  //                               controller: controller,
-  //                               behavior: FlashBehavior.floating,
-  //                               position: FlashPosition.bottom,
-  //                               margin: const EdgeInsets.all(16),
-  //                               borderRadius: BorderRadius.circular(8),
-  //                               backgroundColor: Colors.grey[900]!,
-  //                               child: const DefaultTextStyle(
-  //                                 style: TextStyle(color: Colors.white),
-  //                                 child: Padding(
-  //                                   padding: EdgeInsets.all(8),
-  //                                   child: Text('Produit ajouté au panier!'),
-  //                                 ),
-  //                               ),
-  //                             );
-  //                           },
-  //                         );
-  //                       }
-  //                     : null,
-  //                 style: ButtonStyle(
-  //                   backgroundColor: MaterialStateProperty.all<Color>(
-  //                       widget.drink.available
-  //                           ? Theme.of(context).primaryColor
-  //                           : Colors.grey),
-  //                 ),
-  //                 child: Text(widget.drink.available
-  //                     ? 'Ajouter au panier'
-  //                     : 'Indisponible'),
-  //               ),
-  //             ],
-  //           ),
-  //         ),
-  //       ],
-  //     ),
-  //   );
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -222,6 +116,15 @@ class _DrinkCardState extends State<DrinkCard> {
               const SizedBox(height: 10),
               ElevatedButton(
                 onPressed: () {
+                  final currentUser = FirebaseAuth.instance.currentUser;
+                  final userId = currentUser != null ? currentUser.uid : '';
+
+                  addItemToCart(
+                    userId,
+                    widget.drink,
+                    _quantity,
+                    _selectedFlavor ?? '',
+                  );
                   showFlash(
                     context: context,
                     duration: const Duration(seconds: 2),
@@ -259,5 +162,44 @@ class _DrinkCardState extends State<DrinkCard> {
         ],
       ),
     );
+  }
+}
+
+Future<void> addItemToCart(
+  String userId,
+  Drink drink,
+  int quantity,
+  String selectedFlavor,
+) async {
+  if (quantity > 0) {
+    try {
+      final cartItemRef = FirebaseFirestore.instance
+          .collection('users')
+          .doc(userId)
+          .collection('panier')
+          .doc(drink.name);
+      final cartItem = await cartItemRef.get();
+
+      if (cartItem.exists) {
+        final int currentQuantity = cartItem.get('quantity');
+        await cartItemRef.update({'quantity': currentQuantity + quantity});
+      } else {
+        await cartItemRef.set({
+          'name': drink.name,
+          'quantity': quantity,
+          'price': drink.price,
+          'image': drink.image,
+          'flavor': selectedFlavor,
+        });
+      }
+
+      if (kDebugMode) {
+        print('Added $quantity ${drink.name} ($selectedFlavor) to cart.');
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error adding item to cart: $e');
+      }
+    }
   }
 }

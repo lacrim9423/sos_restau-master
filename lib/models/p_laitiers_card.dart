@@ -49,14 +49,11 @@ class _DairyProductCardState extends State<DairyProductCard> {
                 DropdownButton<String>(
                   value: _selectedUnity,
                   hint: const Text('Choisissez une unité'),
-                  items: _isLiquid
+                  items: widget.product.isLiquid
                       ? const [
-                          DropdownMenuItem(
-                              value: 'Litre', child: Text('Litre')),
+                          DropdownMenuItem(value: 'Pack', child: Text('Pack')),
                         ]
                       : const [
-                          DropdownMenuItem(
-                              value: 'Gramme', child: Text('Gramme')),
                           DropdownMenuItem(
                               value: 'Kilogramme', child: Text('Kilogramme')),
                         ],
@@ -141,122 +138,4 @@ class _DairyProductCardState extends State<DairyProductCard> {
       ),
     );
   }
-
-  // @override
-  // Widget build(BuildContext context) {
-  //   return Card(
-  //     child: Column(
-  //       children: [
-  //         Image.network(widget.product.image),
-  //         Padding(
-  //           padding: const EdgeInsets.all(8.0),
-  //           child: Column(
-  //             children: [
-  //               Text(
-  //                 widget.product.name,
-  //                 style: const TextStyle(fontSize: 20),
-  //               ),
-  //               const SizedBox(height: 8),
-  //               Text(
-  //                 widget.product.description,
-  //                 textAlign: TextAlign.center,
-  //               ),
-  //               const SizedBox(height: 8),
-  //               Text(
-  //                 '${widget.product.price.toStringAsFixed(2)} €',
-  //                 style: const TextStyle(
-  //                   fontWeight: FontWeight.bold,
-  //                   fontSize: 18,
-  //                 ),
-  //               ),
-  //               const SizedBox(height: 8),
-  //               DropdownButton<String>(
-  //                 value: _selectedUnity,
-  //                 hint: const Text('Choisissez une unité'),
-  //                 items: _isLiquid
-  //                     ? const [
-  //                         DropdownMenuItem(
-  //                             value: 'Litre', child: Text('Litre')),
-  //                       ]
-  //                     : const [
-  //                         DropdownMenuItem(
-  //                             value: 'Gramme', child: Text('Gramme')),
-  //                         DropdownMenuItem(
-  //                             value: 'Kilogramme', child: Text('Kilogramme')),
-  //                       ],
-  //                 onChanged: (value) {
-  //                   setState(() {
-  //                     _selectedUnity = value!;
-  //                   });
-  //                 },
-  //               ),
-  //               Center(
-  //                 child: Row(
-  //                   children: [
-  //                     IconButton(
-  //                       onPressed: () {
-  //                         setState(() {
-  //                           _quantity = _quantity > 0 ? _quantity - 1 : 0;
-  //                         });
-  //                       },
-  //                       icon: const Icon(Icons.remove),
-  //                     ),
-  //                     Text(
-  //                       '$_quantity',
-  //                       style: const TextStyle(fontSize: 16),
-  //                     ),
-  //                     IconButton(
-  //                       onPressed: () {
-  //                         setState(() {
-  //                           _quantity += 1;
-  //                         });
-  //                       },
-  //                       icon: const Icon(Icons.add),
-  //                     ),
-  //                   ],
-  //                 ),
-  //               ),
-  //               ElevatedButton(
-  //                 onPressed: widget.product.available
-  //                     ? () {
-  //                         showFlash(
-  //                           context: context,
-  //                           duration: const Duration(seconds: 2),
-  //                           builder: (_, controller) {
-  //                             return Flash(
-  //                               controller: controller,
-  //                               behavior: FlashBehavior.floating,
-  //                               position: FlashPosition.bottom,
-  //                               margin: const EdgeInsets.all(16),
-  //                               borderRadius: BorderRadius.circular(8),
-  //                               backgroundColor: Colors.grey[900]!,
-  //                               child: const DefaultTextStyle(
-  //                                 style: TextStyle(color: Colors.white),
-  //                                 child: Padding(
-  //                                   padding: EdgeInsets.all(8),
-  //                                   child: Text('Produit ajouté au panier!'),
-  //                                 ),
-  //                               ),
-  //                             );
-  //                           },
-  //                         );
-  //                       }
-  //                     : null,
-  //                 style: ButtonStyle(
-  //                   backgroundColor: MaterialStateProperty.all<Color>(
-  //                       widget.product.available
-  //                           ? Theme.of(context).primaryColor
-  //                           : Colors.grey),
-  //                 ),
-  //                 child: Text(widget.product.available
-  //                     ? 'Ajouter au panier'
-  //                     : 'Indisponible'),
-  //               ),
-  //             ],
-  //           ),
-  //         ),
-  //       ],
-  //     ),
-  //   );
-  // }
 }
