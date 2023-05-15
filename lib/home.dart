@@ -7,8 +7,6 @@ import 'package:sos_restau/Categories/hygiene.dart';
 import 'package:sos_restau/Categories/legumes.dart';
 import 'package:sos_restau/Categories/pain_c.dart';
 import 'package:sos_restau/Categories/viande.dart';
-
-import 'package:sos_restau/factures.dart';
 import 'package:sos_restau/historique.dart';
 import 'package:sos_restau/panier.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -17,18 +15,17 @@ import 'Categories/produits_laitiers.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
+  void _goToHome(BuildContext context, String userId) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const HomePage()),
+    );
+  }
 
   void _goToPanier(BuildContext context, String userId) {
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => CartPage(userId: userId)),
-    );
-  }
-
-  void _goToFactures(BuildContext context, String userId) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => InvoicePage(userId: userId)),
     );
   }
 
@@ -42,7 +39,7 @@ class HomePage extends StatelessWidget {
   void _goToProfile(BuildContext context, String userId) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => ProfilePage()),
+      MaterialPageRoute(builder: (context) => const ProfilePage()),
     );
   }
 
@@ -53,159 +50,157 @@ class HomePage extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        appBar: AppBar(
-          title: Row(
-            children: const [
-              Text('Grocery Delivery'),
-            ],
-          ),
-          actions: const [
-            CircleAvatar(
-              backgroundImage: NetworkImage(
-                'https://randomuser.me/api/portraits/men/1.jpg',
-              ),
+          appBar: AppBar(
+            title: Row(
+              children: const [
+                Text('Grocery Delivery'),
+              ],
             ),
-            Text('John Doe'),
-            SizedBox(width: 16),
-          ],
-          bottom: PreferredSize(
-            preferredSize: const Size.fromHeight(48),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: TextField(
-                decoration: InputDecoration(
-                  hintText: 'Search for products',
-                  filled: true,
-                  fillColor: Colors.white,
-                  suffixIcon: const Icon(Icons.search),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(24),
+            actions: const [
+              CircleAvatar(
+                backgroundImage: NetworkImage(
+                  'https://randomuser.me/api/portraits/men/1.jpg',
+                ),
+              ),
+              Text('John Doe'),
+              SizedBox(width: 16),
+            ],
+            bottom: PreferredSize(
+              preferredSize: const Size.fromHeight(48),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: TextField(
+                  decoration: InputDecoration(
+                    hintText: 'Search for products',
+                    filled: true,
+                    fillColor: Colors.white,
+                    suffixIcon: const Icon(Icons.search),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(24),
+                    ),
                   ),
                 ),
               ),
             ),
           ),
-        ),
-        body: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                  padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
-                  child: Row(
-                    children: [
-                      const Expanded(
-                        flex: 1,
-                        child: Text(
-                          'Catégories',
-                          style: TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
+          body: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                    padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+                    child: Row(
+                      children: [
+                        const Expanded(
+                          flex: 1,
+                          child: Text(
+                            'Catégories',
+                            style: TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
+                        Expanded(
+                            flex: 1,
+                            child: TextButton(
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const AllCategoriesPage()),
+                                );
+                              },
+                              child: const Text('Voir Tout',
+                                  style: TextStyle(color: Colors.blue),
+                                  textAlign: TextAlign.end),
+                            )),
+                      ],
+                    )),
+                SizedBox(
+                  height: 120,
+                  child: ListView(
+                    scrollDirection: Axis.horizontal,
+                    children: [
+                      _CategoryCard(
+                        image: 'assets/images/fruits.jpg',
+                        title: 'Fruits',
+                        onTap: () => _goToFruitsCategoryPage(context),
                       ),
-                      Expanded(
-                          flex: 1,
-                          child: TextButton(
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        const AllCategoriesPage()),
-                              );
-                            },
-                            child: const Text('Voir Tout',
-                                style: TextStyle(color: Colors.blue),
-                                textAlign: TextAlign.end),
-                          )),
+                      _CategoryCard(
+                        image: 'assets/images/veggies.jpg',
+                        title: 'Veggies',
+                        onTap: () => _goToVeggiesCategoryPage(context),
+                      ),
+                      _CategoryCard(
+                        image: 'assets/images/bread.jpg',
+                        title: 'Bread',
+                        onTap: () => _goToBreadCategoryPage(context),
+                      ),
+                      _CategoryCard(
+                        image: 'assets/images/drinks.jpg',
+                        title: 'Drinks',
+                        onTap: () => _goToDrinksCategoryPage(context),
+                      ),
+                      _CategoryCard(
+                        image: 'assets/images/grocery.jpg',
+                        title: 'Grocery',
+                        onTap: () => _goToGroceryCategoryPage(context),
+                      ),
+                      _CategoryCard(
+                        image: 'assets/images/meat.jpg',
+                        title: 'Meat',
+                        onTap: () => _goToMeatCategoryPage(context),
+                      ),
+                      _CategoryCard(
+                        image: 'assets/images/dairy.jpg',
+                        title: 'Dairy',
+                        onTap: () => _goToDairyCategoryPage(context),
+                      ),
+                      _CategoryCard(
+                        image: 'assets/images/hygiene.jpg',
+                        title: 'Hygiene',
+                        onTap: () => _goToHygieneCategoryPage(context),
+                      ),
                     ],
-                  )),
-              SizedBox(
-                height: 120,
-                child: ListView(
-                  scrollDirection: Axis.horizontal,
-                  children: [
-                    _CategoryCard(
-                      image: 'assets/images/fruits.jpg',
-                      title: 'Fruits',
-                      onTap: () => _goToFruitsCategoryPage(context),
-                    ),
-                    _CategoryCard(
-                      image: 'assets/images/veggies.jpg',
-                      title: 'Veggies',
-                      onTap: () => _goToVeggiesCategoryPage(context),
-                    ),
-                    _CategoryCard(
-                      image: 'assets/images/bread.jpg',
-                      title: 'Bread',
-                      onTap: () => _goToBreadCategoryPage(context),
-                    ),
-                    _CategoryCard(
-                      image: 'assets/images/drinks.jpg',
-                      title: 'Drinks',
-                      onTap: () => _goToDrinksCategoryPage(context),
-                    ),
-                    _CategoryCard(
-                      image: 'assets/images/grocery.jpg',
-                      title: 'Grocery',
-                      onTap: () => _goToGroceryCategoryPage(context),
-                    ),
-                    _CategoryCard(
-                      image: 'assets/images/meat.jpg',
-                      title: 'Meat',
-                      onTap: () => _goToMeatCategoryPage(context),
-                    ),
-                    _CategoryCard(
-                      image: 'assets/images/dairy.jpg',
-                      title: 'Dairy',
-                      onTap: () => _goToDairyCategoryPage(context),
-                    ),
-                    _CategoryCard(
-                      image: 'assets/images/hygiene.jpg',
-                      title: 'Hygiene',
-                      onTap: () => _goToHygieneCategoryPage(context),
-                    ),
-                  ],
+                  ),
                 ),
-              ),
-              ElevatedButton(
-                onPressed: () => _goToPanier(context, userId),
-                child: const Text("Take me to Cart Page"),
-              ),
-              ElevatedButton(
-                onPressed: () => _goToFactures(context, userId),
-                child: const Text("Take me to Factures Page"),
-              ),
-              ElevatedButton(
-                onPressed: () => _goToCommandes(context, userId),
-                child: const Text("Take me to Commandes Page"),
-              ),
-              ElevatedButton(
-                onPressed: () => _goToProfile(context, userId),
-                child: const Text("Take me to Profile Page"),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
-        bottomNavigationBar: BottomNavigationBar(
-          backgroundColor: Colors.orange.shade50,
-          items: const [
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              label: 'Accueil',
+          bottomNavigationBar: BottomAppBar(
+            color: Colors.orange.shade50,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                IconButton(
+                  onPressed: () {
+                    _goToHome;
+                  },
+                  icon: const Icon(Icons.home),
+                ),
+                IconButton(
+                  onPressed: () {
+                    _goToPanier(context, userId);
+                  },
+                  icon: const Icon(Icons.shopping_cart),
+                ),
+                IconButton(
+                  onPressed: () {
+                    _goToCommandes(context, userId);
+                  },
+                  icon: const Icon(Icons.history),
+                ),
+                IconButton(
+                  onPressed: () {
+                    _goToProfile(context, userId);
+                  },
+                  icon: const Icon(Icons.person),
+                ),
+              ],
             ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.shopping_cart),
-              label: 'Panier',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.person),
-              label: 'Profil',
-            ),
-          ],
-        ),
-      ),
+          )),
     );
   }
 }

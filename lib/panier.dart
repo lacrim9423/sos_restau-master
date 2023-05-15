@@ -1,11 +1,40 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:sos_restau/generer_facture.dart';
+import 'package:sos_restau/historique.dart';
+import 'package:sos_restau/home.dart';
+import 'package:sos_restau/profile.dart';
 
 class CartPage extends StatelessWidget {
   final String userId;
 
   const CartPage({Key? key, required this.userId}) : super(key: key);
+  void _goToPanier(BuildContext context, String userId) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => CartPage(userId: userId)),
+    );
+  }
+
+  void _goToHome(BuildContext context, String userId) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const HomePage()),
+    );
+  }
+
+  void _goToCommandes(BuildContext context, String userId) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => OrderHistoryPage(userId: userId)),
+    );
+  }
+
+  void _goToProfile(BuildContext context, String userId) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const ProfilePage()),
+    );
+  }
 
   void _incrementQuantity(String cartItemId) {
     FirebaseFirestore.instance
@@ -94,140 +123,172 @@ class CartPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Cart'),
-      ),
-      body: StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance
-            .collection('users')
-            .doc(userId)
-            .collection('panier')
-            .snapshots(),
-        builder: (context, snapshot) {
-          if (snapshot.hasError) {
-            return Center(
-              child: Text('Error: ${snapshot.error}'),
-            );
-          }
+        appBar: AppBar(
+          title: const Text('Cart'),
+        ),
+        body: StreamBuilder<QuerySnapshot>(
+          stream: FirebaseFirestore.instance
+              .collection('users')
+              .doc(userId)
+              .collection('panier')
+              .snapshots(),
+          builder: (context, snapshot) {
+            if (snapshot.hasError) {
+              return Center(
+                child: Text('Error: ${snapshot.error}'),
+              );
+            }
 
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
 
-          final cartItems = snapshot.data!.docs;
+            final cartItems = snapshot.data!.docs;
 
-          if (cartItems.isEmpty) {
-            return const Center(
-              child: Text('Your cart is empty'),
-            );
-          }
+            if (cartItems.isEmpty) {
+              return const Center(
+                child: Text('Your cart is empty'),
+              );
+            }
 
-          return Column(
-            children: [
-              Expanded(
-                child: ListView.builder(
-                  itemCount: cartItems.length,
-                  itemBuilder: (context, index) {
-                    final cartItem = cartItems[index];
+            return Column(
+              children: [
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: cartItems.length,
+                    itemBuilder: (context, index) {
+                      final cartItem = cartItems[index];
 
-                    return Card(
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  cartItem['name'],
-                                  style:
-                                      Theme.of(context).textTheme.titleMedium,
-                                ),
-                                Text(
-                                  'Price: ${cartItem['price']}',
-                                  style: Theme.of(context).textTheme.bodySmall,
-                                ),
-                                const SizedBox(height: 8),
-                                Row(
-                                  children: [
-                                    TextButton(
-                                      onPressed: () {
-                                        _decrementQuantity(cartItem.id);
-                                      },
-                                      child: const Text('-'),
-                                    ),
-                                    Text('${cartItem['quantity']}'),
-                                    TextButton(
-                                      onPressed: () {
-                                        _incrementQuantity(cartItem.id);
-                                      },
-                                      child: const Text('+'),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                            IconButton(
-                              onPressed: () {
-                                _deleteCartItem(cartItem.id);
-                              },
-                              icon: const Icon(Icons.delete),
-                            ),
-                          ],
+                      return Card(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    cartItem['name'],
+                                    style:
+                                        Theme.of(context).textTheme.titleMedium,
+                                  ),
+                                  Text(
+                                    'Price: ${cartItem['price']}',
+                                    style:
+                                        Theme.of(context).textTheme.bodySmall,
+                                  ),
+                                  const SizedBox(height: 8),
+                                  Row(
+                                    children: [
+                                      TextButton(
+                                        onPressed: () {
+                                          _decrementQuantity(cartItem.id);
+                                        },
+                                        child: const Text('-'),
+                                      ),
+                                      Text('${cartItem['quantity']}'),
+                                      TextButton(
+                                        onPressed: () {
+                                          _incrementQuantity(cartItem.id);
+                                        },
+                                        child: const Text('+'),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                              IconButton(
+                                onPressed: () {
+                                  _deleteCartItem(cartItem.id);
+                                },
+                                icon: const Icon(Icons.delete),
+                              ),
+                            ],
+                          ),
                         ),
+                      );
+                    },
+                  ),
+                ),
+                Container(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Text(
+                        'Total price:',
+                        style: Theme.of(context).textTheme.titleMedium,
                       ),
-                    );
-                  },
+                      const SizedBox(height: 8),
+                      StreamBuilder<DocumentSnapshot>(
+                        stream: FirebaseFirestore.instance
+                            .collection('users')
+                            .doc(userId)
+                            .snapshots(),
+                        builder: (context, snapshot) {
+                          if (!snapshot.hasData) {
+                            return const Center(
+                                child: CircularProgressIndicator());
+                          }
+
+                          final userData =
+                              snapshot.data!.data() as Map<String, dynamic>;
+                          final totalPrice = userData['total_price'];
+
+                          return Text(
+                            '\$$totalPrice',
+                            style: Theme.of(context).textTheme.titleLarge,
+                          );
+                        },
+                      ),
+                      const SizedBox(height: 16),
+                      ElevatedButton(
+                        onPressed: () {
+                          validateCart(userId);
+                        },
+                        child: const Text('Validate Cart'),
+                      ),
+                    ],
+                  ),
                 ),
+              ],
+            );
+          },
+        ),
+        bottomNavigationBar: BottomAppBar(
+          color: Colors.orange.shade50,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              IconButton(
+                onPressed: () {
+                  _goToHome;
+                },
+                icon: const Icon(Icons.home),
               ),
-              Container(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Text(
-                      'Total price:',
-                      style: Theme.of(context).textTheme.titleMedium,
-                    ),
-                    const SizedBox(height: 8),
-                    StreamBuilder<DocumentSnapshot>(
-                      stream: FirebaseFirestore.instance
-                          .collection('users')
-                          .doc(userId)
-                          .snapshots(),
-                      builder: (context, snapshot) {
-                        if (!snapshot.hasData) {
-                          return const Center(
-                              child: CircularProgressIndicator());
-                        }
-
-                        final userData =
-                            snapshot.data!.data() as Map<String, dynamic>;
-                        final totalPrice = userData['total_price'];
-
-                        return Text(
-                          '\$$totalPrice',
-                          style: Theme.of(context).textTheme.titleLarge,
-                        );
-                      },
-                    ),
-                    const SizedBox(height: 16),
-                    ElevatedButton(
-                      onPressed: () {
-                        validateCart(userId);
-                      },
-                      child: const Text('Validate Cart'),
-                    ),
-                  ],
-                ),
+              IconButton(
+                onPressed: () {
+                  _goToPanier(context, userId);
+                },
+                icon: const Icon(Icons.shopping_cart),
+              ),
+              IconButton(
+                onPressed: () {
+                  _goToCommandes(context, userId);
+                },
+                icon: const Icon(Icons.history),
+              ),
+              IconButton(
+                onPressed: () {
+                  _goToProfile(context, userId);
+                },
+                icon: const Icon(Icons.person),
               ),
             ],
-          );
-        },
-      ),
-    );
+          ),
+        ));
   }
 }
