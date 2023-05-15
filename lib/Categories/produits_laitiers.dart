@@ -1,6 +1,11 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:sos_restau/class/p_laitiers.dart';
 import 'package:sos_restau/models/p_laitiers_card.dart';
+import 'package:sos_restau/historique.dart';
+import 'package:sos_restau/home.dart';
+import 'package:sos_restau/panier.dart';
+import 'package:sos_restau/profile.dart';
 
 class DairyCategoryPage extends StatefulWidget {
   const DairyCategoryPage({super.key});
@@ -11,6 +16,34 @@ class DairyCategoryPage extends StatefulWidget {
 }
 
 class _DairyCategoryPageState extends State<DairyCategoryPage> {
+  void _goToPanier(BuildContext context, String userId) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => CartPage(userId: userId)),
+    );
+  }
+
+  void _goToHome(BuildContext context, String userId) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const HomePage()),
+    );
+  }
+
+  void _goToCommandes(BuildContext context, String userId) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => OrderHistoryPage(userId: userId)),
+    );
+  }
+
+  void _goToProfile(BuildContext context, String userId) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const ProfilePage()),
+    );
+  }
+
   // final List<DairyProduct> _dairyProducts = [
   //    const DairyProduct(
   //     id: '1',
@@ -80,27 +113,61 @@ class _DairyCategoryPageState extends State<DairyCategoryPage> {
 
   @override
   Widget build(BuildContext context) {
+    final user = FirebaseAuth.instance.currentUser;
+    final userId = user?.uid ?? '';
+
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Lait et Dérivés'),
-      ),
-      body: GridView.builder(
-        padding: const EdgeInsets.all(8),
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          childAspectRatio: 0.7,
-          mainAxisSpacing: 8,
-          crossAxisSpacing: 8,
+        appBar: AppBar(
+          title: const Text('Lait et Dérivés'),
         ),
-        itemCount: _dairyProducts.length,
-        itemBuilder: (context, index) {
-          final dairyProduct = _dairyProducts[index];
-          return DairyProductCard(
-            product: dairyProduct,
-          );
-        },
-      ),
-    );
+        body: GridView.builder(
+          padding: const EdgeInsets.all(8),
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            childAspectRatio: 0.7,
+            mainAxisSpacing: 8,
+            crossAxisSpacing: 8,
+          ),
+          itemCount: _dairyProducts.length,
+          itemBuilder: (context, index) {
+            final dairyProduct = _dairyProducts[index];
+            return DairyProductCard(
+              product: dairyProduct,
+            );
+          },
+        ),
+        bottomNavigationBar: BottomAppBar(
+          color: Colors.orange.shade50,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              IconButton(
+                onPressed: () {
+                  _goToHome;
+                },
+                icon: const Icon(Icons.home),
+              ),
+              IconButton(
+                onPressed: () {
+                  _goToPanier(context, userId);
+                },
+                icon: const Icon(Icons.shopping_cart),
+              ),
+              IconButton(
+                onPressed: () {
+                  _goToCommandes(context, userId);
+                },
+                icon: const Icon(Icons.history),
+              ),
+              IconButton(
+                onPressed: () {
+                  _goToProfile(context, userId);
+                },
+                icon: const Icon(Icons.person),
+              ),
+            ],
+          ),
+        ));
   }
   // @override
   // Widget build(BuildContext context) {

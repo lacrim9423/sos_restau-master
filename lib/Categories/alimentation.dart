@@ -1,8 +1,13 @@
 // ignore_for_file: library_private_types_in_public_api
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:sos_restau/class/produit.dart';
 import 'package:flash/flash.dart';
+import 'package:sos_restau/historique.dart';
+import 'package:sos_restau/home.dart';
+import 'package:sos_restau/panier.dart';
+import 'package:sos_restau/profile.dart';
 
 class GroceryCategoryPage extends StatefulWidget {
   const GroceryCategoryPage({Key? key}) : super(key: key);
@@ -12,6 +17,34 @@ class GroceryCategoryPage extends StatefulWidget {
 }
 
 class _GroceryCategoryPageState extends State<GroceryCategoryPage> {
+  void _goToPanier(BuildContext context, String userId) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => CartPage(userId: userId)),
+    );
+  }
+
+  void _goToHome(BuildContext context, String userId) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const HomePage()),
+    );
+  }
+
+  void _goToCommandes(BuildContext context, String userId) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => OrderHistoryPage(userId: userId)),
+    );
+  }
+
+  void _goToProfile(BuildContext context, String userId) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const ProfilePage()),
+    );
+  }
+
   List<Product> groceryProducts = [
     Product(
       id: "1",
@@ -65,32 +98,66 @@ class _GroceryCategoryPageState extends State<GroceryCategoryPage> {
 
   @override
   Widget build(BuildContext context) {
+    final user = FirebaseAuth.instance.currentUser;
+    final userId = user?.uid ?? '';
+
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Épicerie'),
-      ),
-      body: GridView.builder(
-        padding: const EdgeInsets.all(8),
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          childAspectRatio: 0.7,
-          mainAxisSpacing: 8,
-          crossAxisSpacing: 8,
+        appBar: AppBar(
+          title: const Text('Épicerie'),
         ),
-        itemCount: groceryProducts.length,
-        itemBuilder: (context, index) {
-          final product = groceryProducts[index];
-          return ProductCard(
-            product: product,
-            title: product.name,
-            description: '',
-            imageUrl: product.image,
-            price: product.price,
-            available: product.available,
-          );
-        },
-      ),
-    );
+        body: GridView.builder(
+          padding: const EdgeInsets.all(8),
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            childAspectRatio: 0.7,
+            mainAxisSpacing: 8,
+            crossAxisSpacing: 8,
+          ),
+          itemCount: groceryProducts.length,
+          itemBuilder: (context, index) {
+            final product = groceryProducts[index];
+            return ProductCard(
+              product: product,
+              title: product.name,
+              description: '',
+              imageUrl: product.image,
+              price: product.price,
+              available: product.available,
+            );
+          },
+        ),
+        bottomNavigationBar: BottomAppBar(
+          color: Colors.orange.shade50,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              IconButton(
+                onPressed: () {
+                  _goToHome;
+                },
+                icon: const Icon(Icons.home),
+              ),
+              IconButton(
+                onPressed: () {
+                  _goToPanier(context, userId);
+                },
+                icon: const Icon(Icons.shopping_cart),
+              ),
+              IconButton(
+                onPressed: () {
+                  _goToCommandes(context, userId);
+                },
+                icon: const Icon(Icons.history),
+              ),
+              IconButton(
+                onPressed: () {
+                  _goToProfile(context, userId);
+                },
+                icon: const Icon(Icons.person),
+              ),
+            ],
+          ),
+        ));
   }
 }
 

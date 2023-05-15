@@ -1,8 +1,13 @@
 // ignore_for_file: library_private_types_in_public_api
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:sos_restau/class/drink.dart';
 import 'package:sos_restau/models/drink_card.dart';
+import 'package:sos_restau/historique.dart';
+import 'package:sos_restau/home.dart';
+import 'package:sos_restau/panier.dart';
+import 'package:sos_restau/profile.dart';
 
 class DrinkCategoryPage extends StatefulWidget {
   const DrinkCategoryPage({Key? key}) : super(key: key);
@@ -12,6 +17,34 @@ class DrinkCategoryPage extends StatefulWidget {
 }
 
 class _DrinkCategoryPageState extends State<DrinkCategoryPage> {
+  void _goToPanier(BuildContext context, String userId) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => CartPage(userId: userId)),
+    );
+  }
+
+  void _goToCommandes(BuildContext context, String userId) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => OrderHistoryPage(userId: userId)),
+    );
+  }
+
+  void _goToHome(BuildContext context, String userId) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const HomePage()),
+    );
+  }
+
+  void _goToProfile(BuildContext context, String userId) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const ProfilePage()),
+    );
+  }
+
   final List<Drink> _drinks = [
     const Drink(
       id: '1',
@@ -88,31 +121,65 @@ class _DrinkCategoryPageState extends State<DrinkCategoryPage> {
 
   @override
   Widget build(BuildContext context) {
+    final user = FirebaseAuth.instance.currentUser;
+    final userId = user?.uid ?? '';
+
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Boissons'),
-      ),
-      body: GridView.builder(
-        padding: const EdgeInsets.all(8),
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          childAspectRatio: 0.7,
-          mainAxisSpacing: 8,
-          crossAxisSpacing: 8,
+        appBar: AppBar(
+          title: const Text('Boissons'),
         ),
-        itemCount: _drinks.length,
-        itemBuilder: (BuildContext context, int index) {
-          return DrinkCard(
-            key: ValueKey(_drinks[index].id),
-            drink: _drinks[index],
-            title: _drinks[index].name,
-            description: _drinks[index].description,
-            imageUrl: _drinks[index].image,
-            price: _drinks[index].price,
-            available: _drinks[index].available,
-          );
-        },
-      ),
-    );
+        body: GridView.builder(
+          padding: const EdgeInsets.all(8),
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            childAspectRatio: 0.7,
+            mainAxisSpacing: 8,
+            crossAxisSpacing: 8,
+          ),
+          itemCount: _drinks.length,
+          itemBuilder: (BuildContext context, int index) {
+            return DrinkCard(
+              key: ValueKey(_drinks[index].id),
+              drink: _drinks[index],
+              title: _drinks[index].name,
+              description: _drinks[index].description,
+              imageUrl: _drinks[index].image,
+              price: _drinks[index].price,
+              available: _drinks[index].available,
+            );
+          },
+        ),
+        bottomNavigationBar: BottomAppBar(
+          color: Colors.orange.shade50,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              IconButton(
+                onPressed: () {
+                  _goToHome;
+                },
+                icon: const Icon(Icons.home),
+              ),
+              IconButton(
+                onPressed: () {
+                  _goToPanier(context, userId);
+                },
+                icon: const Icon(Icons.shopping_cart),
+              ),
+              IconButton(
+                onPressed: () {
+                  _goToCommandes(context, userId);
+                },
+                icon: const Icon(Icons.history),
+              ),
+              IconButton(
+                onPressed: () {
+                  _goToProfile(context, userId);
+                },
+                icon: const Icon(Icons.person),
+              ),
+            ],
+          ),
+        ));
   }
 }
