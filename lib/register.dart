@@ -1,4 +1,382 @@
-// ignore_for_file: non_constant_identifier_names, use_build_context_synchronously
+// // // ignore_for_file: non_constant_identifier_names, use_build_context_synchronously
+
+// // ignore_for_file: use_build_context_synchronously
+
+// import 'package:firebase_auth/firebase_auth.dart';
+// import 'package:flutter/foundation.dart';
+// import 'package:flutter/material.dart';
+// import 'package:sos_restau/home.dart';
+// import 'package:sos_restau/login.dart';
+// import 'package:cloud_firestore/cloud_firestore.dart';
+
+// import 'package:flutter/material.dart';
+// import 'package:firebase_auth/firebase_auth.dart';
+// import 'package:cloud_firestore/cloud_firestore.dart';
+
+// class EmailInputFb2 extends StatefulWidget {
+//   final TextEditingController inputController;
+//   final String hintText;
+
+//   const EmailInputFb2({
+//     required this.inputController,
+//     required this.hintText,
+//     Key? key,
+//   }) : super(key: key);
+
+//   @override
+//   _EmailInputFb2State createState() => _EmailInputFb2State();
+// }
+
+// class _EmailInputFb2State extends State<EmailInputFb2> {
+//   Color primaryColor = Colors.grey;
+//   Color errorColor = Colors.red;
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Column(
+//       children: [
+//         TextFormField(
+//           controller: widget.inputController,
+//           keyboardType: TextInputType.emailAddress,
+//           decoration: InputDecoration(
+//             hintText: widget.hintText,
+//             enabledBorder: OutlineInputBorder(
+//               borderSide: BorderSide(color: primaryColor, width: 1.0),
+//               borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+//             ),
+//             focusedBorder: OutlineInputBorder(
+//               borderSide: BorderSide(color: primaryColor, width: 1.0),
+//               borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+//             ),
+//             focusedErrorBorder: OutlineInputBorder(
+//               borderSide: BorderSide(color: errorColor, width: 1.0),
+//               borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+//             ),
+//             errorBorder: OutlineInputBorder(
+//               borderSide: BorderSide(color: errorColor, width: 1.0),
+//               borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+//             ),
+//           ),
+//         ),
+//         const SizedBox(height: 10.0), // Add spacing between fields
+//       ],
+//     );
+//   }
+// }
+
+// class PasswordInput extends StatefulWidget {
+//   final String hintText;
+//   final TextEditingController textEditingController;
+
+//   const PasswordInput({
+//     required this.textEditingController,
+//     required this.hintText,
+//     Key? key,
+//   }) : super(key: key);
+
+//   @override
+//   State<PasswordInput> createState() => _PasswordInputState();
+// }
+
+// class _PasswordInputState extends State<PasswordInput> {
+//   bool pwdVisibility = false;
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Column(
+//       children: [
+//         TextFormField(
+//           controller: widget.textEditingController,
+//           obscureText: !pwdVisibility,
+//           decoration: InputDecoration(
+//             hintText: widget.hintText,
+//             enabledBorder: OutlineInputBorder(
+//               borderSide: const BorderSide(color: Colors.grey, width: 1),
+//               borderRadius: BorderRadius.circular(25.0),
+//             ),
+//             focusedErrorBorder: OutlineInputBorder(
+//               borderSide: const BorderSide(color: Colors.red, width: 1),
+//               borderRadius: BorderRadius.circular(25.0),
+//             ),
+//             errorBorder: OutlineInputBorder(
+//               borderSide: const BorderSide(color: Colors.red, width: 1),
+//               borderRadius: BorderRadius.circular(25.0),
+//             ),
+//             focusedBorder: OutlineInputBorder(
+//               borderSide: const BorderSide(color: Colors.grey, width: 1),
+//               borderRadius: BorderRadius.circular(25.0),
+//             ),
+//             suffixIcon: InkWell(
+//               onTap: () => setState(() => pwdVisibility = !pwdVisibility),
+//               child: Icon(
+//                 pwdVisibility
+//                     ? Icons.visibility_outlined
+//                     : Icons.visibility_off_outlined,
+//                 color: Colors.grey.shade400,
+//                 size: 18,
+//               ),
+//             ),
+//           ),
+//           validator: (val) {
+//             if (val!.isEmpty) {
+//               return 'Required';
+//             }
+//             return null;
+//           },
+//         ),
+//         const SizedBox(height: 10.0), // Add spacing between fields
+//       ],
+//     );
+//   }
+// }
+
+// class GradientButtonFb1 extends StatelessWidget {
+//   final String text;
+//   final VoidCallback onPressed;
+
+//   const GradientButtonFb1({
+//     required this.text,
+//     required this.onPressed,
+//     Key? key,
+//   }) : super(key: key);
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Container(
+//       width: double.infinity,
+//       decoration: BoxDecoration(
+//         gradient: const LinearGradient(
+//           colors: [
+//             Color(0xFF15A4EF),
+//             Color(0xFF0070BA),
+//           ],
+//           begin: Alignment.topCenter,
+//           end: Alignment.bottomCenter,
+//         ),
+//         borderRadius: BorderRadius.circular(10.0),
+//       ),
+//       child: MaterialButton(
+//         onPressed: onPressed,
+//         textColor: Colors.white,
+//         padding: const EdgeInsets.symmetric(vertical: 16.0),
+//         child: Text(
+//           text,
+//           style: const TextStyle(fontSize: 16.0),
+//         ),
+//       ),
+//     );
+//   }
+// }
+
+// class RegisterPage1 extends StatelessWidget {
+//   final TextEditingController _emailController = TextEditingController();
+//   final TextEditingController _passwordController = TextEditingController();
+//   final TextEditingController _nameController = TextEditingController();
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: const Text('Register'),
+//       ),
+//       body: Center(
+//         child: Padding(
+//           padding: const EdgeInsets.all(16.0),
+//           child: Column(
+//             mainAxisAlignment: MainAxisAlignment.center,
+//             children: [
+//               // Name field
+//               EmailInputFb2(
+//                 inputController: _nameController,
+//                 hintText: 'Name',
+//               ),
+//               // Email field
+//               EmailInputFb2(
+//                 inputController: _emailController,
+//                 hintText: 'Email',
+//               ),
+//               // Password field
+//               PasswordInput(
+//                 textEditingController: _passwordController,
+//                 hintText: 'Password',
+//               ),
+//               // Register button
+//               GradientButtonFb1(
+//                 text: 'Register',
+//                 onPressed: () {
+//                   // Navigate to the next page
+//                   Navigator.push(
+//                     context,
+//                     MaterialPageRoute(
+//                       builder: (context) => RegisterPage2(
+//                         name: _emailController.text.trim(),
+//                         email: _emailController.text.trim(),
+//                         password: _passwordController.text.trim(),
+//                       ),
+//                     ),
+//                   );
+//                 },
+//               ),
+//             ],
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+// }
+
+// class RegisterPage2 extends StatelessWidget {
+//   final String name;
+//   final String email;
+//   final String password;
+
+//   final TextEditingController _restaurantController = TextEditingController();
+//   final TextEditingController _addressController = TextEditingController();
+//   final TextEditingController _phoneNumberController = TextEditingController();
+//   final TextEditingController _licenseNumberController =
+//       TextEditingController();
+
+//   RegisterPage2({
+//     required this.name,
+//     required this.email,
+//     required this.password,
+//   });
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: const Text('Technical Information'),
+//       ),
+//       body: Center(
+//         child: Padding(
+//           padding: const EdgeInsets.all(16.0),
+//           child: Column(
+//             mainAxisAlignment: MainAxisAlignment.center,
+//             children: [
+//               // Restaurant field
+//               EmailInputFb2(
+//                 inputController: _restaurantController,
+//                 hintText: 'Restaurant',
+//               ),
+//               // Address field
+//               EmailInputFb2(
+//                 inputController: _addressController,
+//                 hintText: 'Address',
+//               ),
+//               // Phone number field
+//               TextFormField(
+//                 controller: _phoneNumberController,
+//                 keyboardType: TextInputType.phone,
+//                 decoration: InputDecoration(
+//                   hintText: 'Phone Number',
+//                   enabledBorder: OutlineInputBorder(
+//                     borderSide: const BorderSide(color: Colors.grey, width: 1),
+//                     borderRadius: BorderRadius.circular(25.0),
+//                   ),
+//                   focusedErrorBorder: OutlineInputBorder(
+//                     borderSide: const BorderSide(color: Colors.red, width: 1),
+//                     borderRadius: BorderRadius.circular(25.0),
+//                   ),
+//                   errorBorder: OutlineInputBorder(
+//                     borderSide: const BorderSide(color: Colors.red, width: 1),
+//                     borderRadius: BorderRadius.circular(25.0),
+//                   ),
+//                   focusedBorder: OutlineInputBorder(
+//                     borderSide: const BorderSide(color: Colors.grey, width: 1),
+//                     borderRadius: BorderRadius.circular(25.0),
+//                   ),
+//                 ),
+//               ),
+//               const SizedBox(height: 10.0), // Add spacing between fields
+//               // License number field
+//               TextFormField(
+//                 controller: _licenseNumberController,
+//                 keyboardType: TextInputType.number,
+//                 decoration: InputDecoration(
+//                   hintText: 'License Number',
+//                   enabledBorder: OutlineInputBorder(
+//                     borderSide: const BorderSide(color: Colors.grey, width: 1),
+//                     borderRadius: BorderRadius.circular(25.0),
+//                   ),
+//                   focusedErrorBorder: OutlineInputBorder(
+//                     borderSide: const BorderSide(color: Colors.red, width: 1),
+//                     borderRadius: BorderRadius.circular(25.0),
+//                   ),
+//                   errorBorder: OutlineInputBorder(
+//                     borderSide: const BorderSide(color: Colors.red, width: 1),
+//                     borderRadius: BorderRadius.circular(25.0),
+//                   ),
+//                   focusedBorder: OutlineInputBorder(
+//                     borderSide: const BorderSide(color: Colors.grey, width: 1),
+//                     borderRadius: BorderRadius.circular(25.0),
+//                   ),
+//                 ),
+//               ),
+//               const SizedBox(height: 10.0), // Add spacing between fields
+//               // Register button
+//               GradientButtonFb1(
+//                 text: 'Register',
+//                 onPressed: () {
+//                   // Register user and navigate to the home page
+//                   registerUser(context);
+//                 },
+//               ),
+//             ],
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+
+//   void registerUser(BuildContext context) async {
+//     try {
+//       UserCredential userCredential =
+//           await FirebaseAuth.instance.createUserWithEmailAndPassword(
+//         email: email,
+//         password: password,
+//       );
+
+//       // Store additional user information in Firestore
+//       await FirebaseFirestore.instance
+//           .collection('users')
+//           .doc(userCredential.user!.uid)
+//           .set({
+//         'name': name,
+//         'email': email,
+//         'restaurant': _restaurantController.text.trim(),
+//         'address': _addressController.text.trim(),
+//         'phoneNumber': _phoneNumberController.text.trim(),
+//         'licenseNumber': _licenseNumberController.text.trim(),
+//       });
+
+//       // Navigate to home page or any other desired screen
+//       Navigator.pushReplacement(
+//         context,
+//         MaterialPageRoute(builder: (context) => const HomePage()),
+//       );
+//     } catch (e) {
+//       // Handle registration errors
+//       showDialog(
+//         context: context,
+//         builder: (BuildContext context) {
+//           return AlertDialog(
+//             title: const Text('Registration Failed'),
+//             content: Text(e.toString()),
+//             actions: [
+//               TextButton(
+//                 child: const Text('OK'),
+//                 onPressed: () {
+//                   Navigator.of(context).pop();
+//                 },
+//               ),
+//             ],
+//           );
+//         },
+//       );
+//     }
+//   }
+// }
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
@@ -7,356 +385,400 @@ import 'package:sos_restau/home.dart';
 import 'package:sos_restau/login.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class RegisterPage extends StatefulWidget {
-  const RegisterPage({Key? key}) : super(key: key);
+class EmailInputFb2 extends StatefulWidget {
+  final TextEditingController inputController;
+  final String hintText;
+
+  const EmailInputFb2({
+    required this.inputController,
+    required this.hintText,
+    Key? key,
+  }) : super(key: key);
 
   @override
-  State<RegisterPage> createState() => _RegisterPageState();
+  _EmailInputFb2State createState() => _EmailInputFb2State();
 }
 
-class _RegisterPageState extends State<RegisterPage> {
-  final _restaurantController = TextEditingController();
-  final _nomController = TextEditingController();
-  final _prenomController = TextEditingController();
-  final _emailController = TextEditingController();
-  final _motDePasseController = TextEditingController();
-  final _motDePasseConfirmerController = TextEditingController();
-  final _phoneController = TextEditingController();
-  final _adresseController = TextEditingController();
-  final FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
+class _EmailInputFb2State extends State<EmailInputFb2> {
+  Color primaryColor = Colors.grey;
+  Color errorColor = Colors.red;
 
   @override
-  void dispose() {
-    _emailController.dispose();
-    _motDePasseController.dispose();
-    _motDePasseConfirmerController.dispose();
-    _nomController.dispose();
-    _prenomController.dispose();
-    _phoneController.dispose();
-    _adresseController.dispose();
-    _restaurantController.dispose();
-    super.dispose();
-  }
-////// authentifier l'utilisateur
-
-  Future<void> signUp() async {
-    try {
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(
-          email: _emailController.text, password: _motDePasseController.text);
-      User? user = FirebaseAuth.instance.currentUser;
-      if (user != null) {
-        if (!passwordsMatch()) {
-          showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return AlertDialog(
-                title: const Text("Passwords do not match"),
-                content: const Text("Please make sure your passwords match."),
-                actions: [
-                  ElevatedButton(
-                    child: const Text("OK"),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                  ),
-                ],
-              );
-            },
-          );
-        }
-        await firebaseFirestore.collection("users").doc(user.uid).set({
-          "userId": user.uid.trim(),
-          "nom": _nomController.text.trim(),
-          "email": _emailController.text.trim(),
-          "phone": _phoneController.text.trim(),
-          "prenom": _prenomController.text.trim(),
-          "restaurant": _restaurantController.text.trim(),
-          "adresse": _adresseController.text.trim(),
-          "motdepasse": _motDePasseController.text.trim()
-        });
-      }
-    } on FirebaseAuthException catch (e) {
-      if (e.code == 'weak-password') {
-        ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text("Le mot de passe est trop faible")));
-      } else if (e.code == 'email-already-in-use') {
-        ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text("Ce compte existe déjà")));
-      }
-    } catch (e) {
-      if (kDebugMode) {
-        print(e);
-      }
-    }
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => HomePage()),
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        TextFormField(
+          controller: widget.inputController,
+          keyboardType: TextInputType.emailAddress,
+          decoration: InputDecoration(
+            hintText: widget.hintText,
+            enabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: primaryColor, width: 1.0),
+              borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: primaryColor, width: 1.0),
+              borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+            ),
+            focusedErrorBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: errorColor, width: 1.0),
+              borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+            ),
+            errorBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: errorColor, width: 1.0),
+              borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+            ),
+          ),
+          validator: (val) {
+            if (val!.isEmpty) {
+              return 'Required';
+            }
+            return null;
+          },
+        ),
+        const SizedBox(height: 10.0), // Add spacing between fields
+      ],
     );
   }
+}
 
-  bool passwordsMatch() {
-    return _motDePasseController.text == _motDePasseConfirmerController.text;
+class PasswordInput extends StatefulWidget {
+  final String hintText;
+  final TextEditingController textEditingController;
+
+  const PasswordInput({
+    required this.textEditingController,
+    required this.hintText,
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  State<PasswordInput> createState() => _PasswordInputState();
+}
+
+class _PasswordInputState extends State<PasswordInput> {
+  bool pwdVisibility = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        TextFormField(
+          controller: widget.textEditingController,
+          obscureText: !pwdVisibility,
+          decoration: InputDecoration(
+            hintText: widget.hintText,
+            enabledBorder: OutlineInputBorder(
+              borderSide: const BorderSide(color: Colors.grey, width: 1),
+              borderRadius: BorderRadius.circular(25.0),
+            ),
+            focusedErrorBorder: OutlineInputBorder(
+              borderSide: const BorderSide(color: Colors.red, width: 1),
+              borderRadius: BorderRadius.circular(25.0),
+            ),
+            errorBorder: OutlineInputBorder(
+              borderSide: const BorderSide(color: Colors.red, width: 1),
+              borderRadius: BorderRadius.circular(25.0),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderSide: const BorderSide(color: Colors.grey, width: 1),
+              borderRadius: BorderRadius.circular(25.0),
+            ),
+            suffixIcon: InkWell(
+              onTap: () => setState(() => pwdVisibility = !pwdVisibility),
+              child: Icon(
+                pwdVisibility
+                    ? Icons.visibility_outlined
+                    : Icons.visibility_off_outlined,
+                color: Colors.grey.shade400,
+                size: 18,
+              ),
+            ),
+          ),
+          validator: (val) {
+            if (val!.isEmpty) {
+              return 'Required';
+            }
+            return null;
+          },
+        ),
+        const SizedBox(height: 10.0), // Add spacing between fields
+      ],
+    );
   }
+}
+
+class GradientButtonFb1 extends StatelessWidget {
+  final String text;
+  final VoidCallback onPressed;
+
+  const GradientButtonFb1({
+    required this.text,
+    required this.onPressed,
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          colors: [
+            Color.fromARGB(255, 239, 188, 21),
+            Color.fromARGB(255, 230, 129, 15),
+          ],
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+        ),
+        borderRadius: BorderRadius.circular(10.0),
+      ),
+      child: MaterialButton(
+        onPressed: onPressed,
+        textColor: Colors.white,
+        padding: const EdgeInsets.symmetric(vertical: 16.0),
+        child: Text(
+          text,
+          style: const TextStyle(fontSize: 16.0),
+        ),
+      ),
+    );
+  }
+}
+
+class RegisterPage1 extends StatelessWidget {
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[300],
-      body: SafeArea(
-          child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const SizedBox(height: 25),
-
-            //Sos Restau
-            const Text(
-              'Sos Restau',
-            ),
-            const SizedBox(height: 10),
-            const Text(
-              'Vous Souhaite la Bienvenue  inscrivez-vous ci-dessous avec vos coordonnées',
-              style: TextStyle(
-                fontSize: 18,
+      body: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              // Name field
+              EmailInputFb2(
+                inputController: _nameController,
+                hintText: 'Nom',
               ),
-            ),
-            const SizedBox(height: 45),
-
-            // nom
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 25.0),
-              child: TextField(
-                controller: _nomController,
-                decoration: InputDecoration(
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(color: Colors.white),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(color: Colors.deepPurple),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  hintText: 'nom',
-                  fillColor: Colors.grey[200],
-                  filled: true,
-                ),
+              // Email field
+              EmailInputFb2(
+                inputController: _emailController,
+                hintText: 'Email',
               ),
-            ),
-            const SizedBox(height: 10),
-
-            // prènom
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 25.0),
-              child: TextField(
-                controller: _prenomController,
-                decoration: InputDecoration(
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(color: Colors.white),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(color: Colors.deepPurple),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  hintText: 'prènom',
-                  fillColor: Colors.grey[200],
-                  filled: true,
-                ),
+              // Password field
+              PasswordInput(
+                textEditingController: _passwordController,
+                hintText: 'Mot de Passe',
               ),
-            ),
-            const SizedBox(height: 10),
-
-            // email
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 25.0),
-              child: TextField(
-                controller: _emailController,
-                decoration: InputDecoration(
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(color: Colors.white),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(color: Colors.deepPurple),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  hintText: 'Email',
-                  fillColor: Colors.grey[200],
-                  filled: true,
-                ),
+              // Confirm password field
+              PasswordInput(
+                textEditingController: _confirmPasswordController,
+                hintText: 'Confirmer MOt de Passe',
               ),
-            ),
-            const SizedBox(height: 10),
-
-            // numèro de tèlèphone
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 25.0),
-              child: TextField(
-                controller: _phoneController,
-                decoration: InputDecoration(
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(color: Colors.white),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(color: Colors.deepPurple),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  hintText: 'numèro de tèlèphone',
-                  fillColor: Colors.grey[200],
-                  filled: true,
-                ),
-              ),
-            ),
-            const SizedBox(height: 10),
-
-            // Adresse
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 25.0),
-              child: TextField(
-                controller: _adresseController,
-                decoration: InputDecoration(
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(color: Colors.white),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(color: Colors.deepPurple),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  hintText: 'Adresse',
-                  fillColor: Colors.grey[200],
-                  filled: true,
-                ),
-              ),
-            ),
-            const SizedBox(height: 10),
-
-            // Socitè
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 25.0),
-              child: TextField(
-                controller: _restaurantController,
-                decoration: InputDecoration(
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(color: Colors.white),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(color: Colors.deepPurple),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  hintText: 'Restaurant',
-                  fillColor: Colors.grey[200],
-                  filled: true,
-                ),
-              ),
-            ),
-            const SizedBox(height: 10),
-
-            //Mot de passe
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 25.0),
-              child: TextField(
-                obscureText: true,
-                controller: _motDePasseController,
-                decoration: InputDecoration(
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(color: Colors.white),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(color: Colors.deepPurple),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  hintText: 'mot de passe',
-                  fillColor: Colors.grey[200],
-                  filled: true,
-                ),
-              ),
-            ),
-            const SizedBox(height: 15),
-
-            // confirmer Mot de passe
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 25.0),
-              child: TextField(
-                obscureText: true,
-                controller: _motDePasseConfirmerController,
-                decoration: InputDecoration(
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(color: Colors.white),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(color: Colors.deepPurple),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  hintText: ' confirmer mot de passe',
-                  fillColor: Colors.grey[200],
-                  filled: true,
-                ),
-              ),
-            ),
-            const SizedBox(height: 15),
-
-            //Sidentifier button
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 25.0),
-              child: GestureDetector(
-                onTap: signUp,
-                child: Container(
-                  padding: const EdgeInsets.all(20),
-                  decoration: BoxDecoration(
-                    color: Colors.deepPurple,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: const Center(
-                    child: Text(
-                      'Sidentifier',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(height: 25),
-
-            //pas membre/sincrire maintenant
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Text(
-                  'je suis membre!',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () {
+              // Register button
+              GradientButtonFb1(
+                text: 'Suivant',
+                onPressed: () {
+                  // Check if the passwords match
+                  if (_passwordController.text ==
+                      _confirmPasswordController.text) {
+                    // Navigate to the next page
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const LoginPage()),
+                        builder: (context) => RegisterPage2(
+                          name: _nameController.text.trim(),
+                          email: _emailController.text.trim(),
+                          password: _passwordController.text.trim(),
+                        ),
+                      ),
                     );
-                  },
-                  child: const Text(
-                    'Connecte-toi maintenant',
-                    style: TextStyle(
-                      color: Colors.blueAccent,
-                      fontWeight: FontWeight.bold,
-                    ),
+                  } else {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: const Text('Mot de passe non identiques'),
+                          content: const Text('Utilisez le même mot de passe.'),
+                          actions: [
+                            TextButton(
+                              child: const Text('OK'),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  }
+                },
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class RegisterPage2 extends StatelessWidget {
+  final String name;
+  final String email;
+  final String password;
+
+  final TextEditingController _restaurantController = TextEditingController();
+  final TextEditingController _addressController = TextEditingController();
+  final TextEditingController _phoneNumberController = TextEditingController();
+  final TextEditingController _licenseNumberController =
+      TextEditingController();
+
+  RegisterPage2({
+    required this.name,
+    required this.email,
+    required this.password,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('2ème Étape'),
+      ),
+      body: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              // Restaurant field
+              EmailInputFb2(
+                inputController: _restaurantController,
+                hintText: 'Nom du restaurant',
+              ),
+              // Address field
+              EmailInputFb2(
+                inputController: _addressController,
+                hintText: 'Addresse du restaurant',
+              ),
+              // Phone number field
+              TextFormField(
+                controller: _phoneNumberController,
+                keyboardType: TextInputType.phone,
+                decoration: InputDecoration(
+                  hintText: 'Numéro de Téléphone',
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(color: Colors.grey, width: 1),
+                    borderRadius: BorderRadius.circular(25.0),
+                  ),
+                  focusedErrorBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(color: Colors.red, width: 1),
+                    borderRadius: BorderRadius.circular(25.0),
+                  ),
+                  errorBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(color: Colors.red, width: 1),
+                    borderRadius: BorderRadius.circular(25.0),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(color: Colors.grey, width: 1),
+                    borderRadius: BorderRadius.circular(25.0),
                   ),
                 ),
-              ],
-            ),
-          ],
+              ),
+              const SizedBox(height: 10.0), // Add spacing between fields
+              // License number field
+              TextFormField(
+                controller: _licenseNumberController,
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(
+                  hintText: 'Numéro de registre ',
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(color: Colors.grey, width: 1),
+                    borderRadius: BorderRadius.circular(25.0),
+                  ),
+                  focusedErrorBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(color: Colors.red, width: 1),
+                    borderRadius: BorderRadius.circular(25.0),
+                  ),
+                  errorBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(color: Colors.red, width: 1),
+                    borderRadius: BorderRadius.circular(25.0),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(color: Colors.grey, width: 1),
+                    borderRadius: BorderRadius.circular(25.0),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 10.0), // Add spacing between fields
+              // Register button
+              GradientButtonFb1(
+                text: 'Suivant',
+                onPressed: () {
+                  // Register user and navigate to the home page
+                  registerUser(context);
+                },
+              ),
+            ],
+          ),
         ),
-      )),
+      ),
     );
+  }
+
+  void registerUser(BuildContext context) async {
+    try {
+      UserCredential userCredential =
+          await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+
+      // Store additional user information in Firestore
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userCredential.user!.uid)
+          .set({
+        'nom': name,
+        'motdepasse': password,
+        'email': email,
+        'restaurant': _restaurantController.text.trim(),
+        'addresse': _addressController.text.trim(),
+        'phone': _phoneNumberController.text.trim(),
+        'registre': _licenseNumberController.text.trim(),
+      });
+
+      // Navigate to home page or any other desired screen
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const HomePage()),
+      );
+    } catch (e) {
+      // Handle registration errors
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Registration Failed'),
+            content: Text('Error: $e'),
+            actions: [
+              TextButton(
+                child: const Text('OK'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+    }
   }
 }

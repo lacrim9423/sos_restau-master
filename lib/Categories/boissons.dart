@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:sos_restau/class/drink.dart';
+import 'package:sos_restau/hha.dart';
 import 'package:sos_restau/models/drink_card.dart';
 import 'package:sos_restau/historique.dart';
 import 'package:sos_restau/home.dart';

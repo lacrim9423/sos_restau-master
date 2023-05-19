@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:sos_restau/class/produit.dart';
 import 'package:flash/flash.dart';
+import 'package:sos_restau/hha.dart';
 import 'package:sos_restau/historique.dart';
 import 'package:sos_restau/home.dart';
 import 'package:sos_restau/panier.dart';
