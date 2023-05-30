@@ -1,26 +1,41 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:sos_restau/historique.dart';
 import 'package:sos_restau/home.dart';
 import 'package:sos_restau/profile.dart';
 
-class CartPage extends StatelessWidget {
+class CartPage extends StatefulWidget {
   final String userId;
 
   const CartPage({Key? key, required this.userId}) : super(key: key);
-  void _goToPanier(BuildContext context, String userId) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => CartPage(userId: userId)),
-    );
+
+  @override
+  _CartPageState createState() => _CartPageState();
+}
+
+class _CartPageState extends State<CartPage> {
+  late double totalPrice;
+
+  @override
+  void initState() {
+    super.initState();
+    totalPrice = 0.0;
   }
 
   void _goToHome(BuildContext context, String userId) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => HomePage()),
+      MaterialPageRoute(builder: (context) => const HomePage()),
+    );
+  }
+
+  void _goToPanier(BuildContext context, String userId) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => CartPage(userId: userId)),
     );
   }
 
@@ -41,28 +56,36 @@ class CartPage extends StatelessWidget {
   void _incrementQuantity(String cartItemId) {
     FirebaseFirestore.instance
         .collection('users')
-        .doc(userId)
+        .doc(widget.userId)
         .collection('panier')
         .doc(cartItemId)
-        .update({'quantity': FieldValue.increment(1)});
+        .update({'quantity': FieldValue.increment(1)}).then((_) => setState(() {
+              totalPrice += 1; // Update total price
+            }));
   }
 
   void _decrementQuantity(String cartItemId) {
     FirebaseFirestore.instance
         .collection('users')
-        .doc(userId)
+        .doc(widget.userId)
         .collection('panier')
         .doc(cartItemId)
-        .update({'quantity': FieldValue.increment(-1)});
+        .update({'quantity': FieldValue.increment(-1)}).then(
+            (_) => setState(() {
+                  totalPrice -= 1; // Update total price
+                }));
   }
 
-  void _deleteCartItem(String cartItemId) {
+  void _deleteCartItem(String cartItemId, double itemPrice, int itemQuantity) {
     FirebaseFirestore.instance
         .collection('users')
-        .doc(userId)
+        .doc(widget.userId)
         .collection('panier')
         .doc(cartItemId)
-        .delete();
+        .delete()
+        .then((_) => setState(() {
+              totalPrice -= itemPrice * itemQuantity; // Update total price
+            }));
   }
 
   Future<void> validateCart(String userId, bool isTomorrow, bool isWeek,
@@ -121,6 +144,7 @@ class CartPage extends StatelessWidget {
       'isTomorrow': isTomorrow,
       'isWeek': isWeek,
       'isMonth': isMonth,
+      'totalPrice': totalPrice, // Include the totalPrice
       'items': validatedCart,
     });
 
@@ -132,6 +156,8 @@ class CartPage extends StatelessWidget {
       'isWeek': isWeek,
       'isMonth': isMonth,
       'items': validatedCart,
+      'totalPrice': totalPrice, // Include the totalPrice
+
       'paid': false,
     });
 
@@ -140,7 +166,6 @@ class CartPage extends StatelessWidget {
     for (final cartItem in cartItems.docs) {
       batch.delete(cartItem.reference);
     }
-    // await generateInvoice(userId);
 
     await batch.commit();
 
@@ -211,12 +236,14 @@ class CartPage extends StatelessWidget {
       bool isMonth = selectedDuration == 'month';
 
       // Call the validateCart function with the selected duration
-      await validateCart(userId, isTomorrow, isWeek, isMonth, context);
+      await validateCart(widget.userId, isTomorrow, isWeek, isMonth, context);
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final user = FirebaseAuth.instance.currentUser;
+    final userId = user?.uid ?? '';
     return Scaffold(
       appBar: AppBar(
         title: const Text('Cart'),
@@ -224,166 +251,83 @@ class CartPage extends StatelessWidget {
       body: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
             .collection('users')
-            .doc(userId)
+            .doc(widget.userId)
             .collection('panier')
             .snapshots(),
         builder: (context, snapshot) {
-          if (snapshot.hasError) {
-            return Center(
-              child: Text('Error: ${snapshot.error}'),
-            );
-          }
-
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
+          if (!snapshot.hasData) {
+            return const Center(child: CircularProgressIndicator());
           }
 
           final cartItems = snapshot.data!.docs;
-
           if (cartItems.isEmpty) {
             return const Center(
-              child: Text('Your cart is empty'),
+              child: Text('Your cart is empty.'),
             );
           }
 
-          return Column(
-            children: [
-              Expanded(
-                child: ListView.builder(
-                  itemCount: cartItems.length,
-                  itemBuilder: (context, index) {
-                    final cartItem = cartItems[index];
+          return ListView.builder(
+            itemCount: cartItems.length,
+            padding: const EdgeInsets.all(8.0),
+            itemBuilder: (context, index) {
+              final cartItem = cartItems[index];
+              final cartItemId = cartItem.id;
+              final productName = cartItem.get('name');
+              final productPrice = cartItem.get('price');
+              final productQuantity = cartItem.get('quantity');
+              final imageUrl = cartItem.get('image');
 
-                    return Card(
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  '${cartItem['name']} (${cartItem['flavor']})',
-                                  style: Theme.of(context).textTheme.titleLarge,
-                                ),
-                                Text(
-                                  'Price: ${cartItem['price']}',
-                                  style: Theme.of(context).textTheme.titleSmall,
-                                ),
-                                const SizedBox(height: 8),
-                                Row(
-                                  children: [
-                                    TextButton(
-                                      onPressed: () {
-                                        _decrementQuantity(cartItem.id);
-                                      },
-                                      child: const Text('-'),
-                                    ),
-                                    Text('${cartItem['quantity']}'),
-                                    TextButton(
-                                      onPressed: () {
-                                        _incrementQuantity(cartItem.id);
-                                      },
-                                      child: const Text('+'),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                            IconButton(
-                              onPressed: () {
-                                _deleteCartItem(cartItem.id);
-                              },
-                              icon: const Icon(Icons.delete),
-                            ),
-                          ],
-                        ),
+              return Card(
+                elevation: 4,
+                margin: const EdgeInsets.symmetric(vertical: 8),
+                child: ListTile(
+                  leading: Image.network(
+                    imageUrl,
+                    width: 80,
+                    height: 80,
+                    fit: BoxFit.cover,
+                  ),
+                  title: Text(productName),
+                  subtitle: Text('Price: \$${productPrice.toStringAsFixed(2)}'),
+                  trailing: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      IconButton(
+                        onPressed: () {
+                          _decrementQuantity(cartItemId);
+                        },
+                        icon: const Icon(Icons.remove),
                       ),
-                    );
-                  },
+                      Text(productQuantity.toString()),
+                      IconButton(
+                        onPressed: () {
+                          _incrementQuantity(cartItemId);
+                        },
+                        icon: const Icon(Icons.add),
+                      ),
+                      IconButton(
+                        onPressed: () {
+                          _deleteCartItem(
+                              cartItemId, productPrice, productQuantity);
+                        },
+                        icon: const Icon(Icons.delete),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              Container(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Text(
-                      'Total price:',
-                      style: Theme.of(context).textTheme.titleLarge,
-                    ),
-                    const SizedBox(height: 8),
-                    StreamBuilder<DocumentSnapshot>(
-                      stream: FirebaseFirestore.instance
-                          .collection('users')
-                          .doc(userId)
-                          .snapshots(),
-                      builder: (context, snapshot) {
-                        if (!snapshot.hasData) {
-                          return const Center(
-                            child: CircularProgressIndicator(),
-                          );
-                        }
-
-                        final userData =
-                            snapshot.data!.data() as Map<String, dynamic>;
-                        final totalPrice = userData['total_price'];
-
-                        return Text(
-                          '\$$totalPrice',
-                          style: Theme.of(context).textTheme.headlineSmall,
-                        );
-                      },
-                    ),
-                    const SizedBox(height: 16),
-                    ElevatedButton(
-                      onPressed: () {
-                        showOrderDurationDialog(context);
-                      },
-                      child: const Text('Validate Cart'),
-                    ),
-                  ],
-                ),
-              ),
-            ],
+              );
+            },
           );
         },
       ),
-      bottomNavigationBar: BottomAppBar(
-        color: Colors.orange.shade50,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            IconButton(
-              onPressed: () {
-                _goToHome(context, userId);
-              },
-              icon: const Icon(Icons.home),
-            ),
-            IconButton(
-              onPressed: () {
-                _goToPanier(context, userId);
-              },
-              icon: const Icon(Icons.shopping_cart),
-            ),
-            IconButton(
-              onPressed: () {
-                _goToCommandes(context, userId);
-              },
-              icon: const Icon(Icons.history),
-            ),
-            IconButton(
-              onPressed: () {
-                _goToProfile(context, userId);
-              },
-              icon: const Icon(Icons.person),
-            ),
-          ],
-        ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          showOrderDurationDialog(context);
+        },
+        label: const Text('Valider Le Panier'),
+        icon: const Icon(Icons.check),
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }

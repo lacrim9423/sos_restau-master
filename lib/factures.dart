@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
@@ -51,9 +53,9 @@ class InvoicePage extends StatelessWidget {
     );
   }
 
-  Future<String> _getInvoiceUrl() async {
-    String downloadURL = await firebase_storage.FirebaseStorage.instance
-        .ref('Invoice.pdf')
+  Future<String> _getInvoiceUrl(String invoiceId) async {
+    final downloadURL = await firebase_storage.FirebaseStorage.instance
+        .ref('factures/$invoiceId.pdf')
         .getDownloadURL();
     return downloadURL;
   }
@@ -65,7 +67,7 @@ class InvoicePage extends StatelessWidget {
 
     return Scaffold(
         appBar: AppBar(
-          title: const Text('Invoices'),
+          title: const Text('Factures'),
         ),
         body: StreamBuilder<QuerySnapshot>(
           stream:
@@ -87,19 +89,21 @@ class InvoicePage extends StatelessWidget {
 
             if (documents.isEmpty) {
               return const Center(
-                child: Text('No invoices found.'),
+                child: Text("Vous n'avez pas de factures."),
               );
             }
 
             final invoices = documents.map((document) {
               final items = List<Map<String, dynamic>>.from(document['items']);
-              return Invoice(total: 0, paid: false, items: items);
+              final total = 1.0;
+              final paid = document['paid'];
+              return Invoice(total: total, paid: paid, items: items);
             }).toList();
-
             return ListView.builder(
               itemCount: invoices.length,
               itemBuilder: (context, index) {
                 final invoice = invoices[index];
+                final document = documents[index];
 
                 return Container(
                   margin:
@@ -142,9 +146,10 @@ class InvoicePage extends StatelessWidget {
                       const SizedBox(height: 10),
                       ElevatedButton(
                         onPressed: () async {
-                          String invoiceUrl = await _getInvoiceUrl();
-                          if (await canLaunchUrl(invoiceUrl as Uri)) {
-                            await launchUrl(invoiceUrl as Uri);
+                          String invoiceUrl = await _getInvoiceUrl(document
+                              .id); // Pass the invoice ID to retrieve the correct URL
+                          if (await canLaunch(invoiceUrl)) {
+                            await launch(invoiceUrl);
                           } else {
                             throw 'Could not launch $invoiceUrl';
                           }

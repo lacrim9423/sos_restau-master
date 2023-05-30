@@ -379,10 +379,8 @@
 // }
 
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:sos_restau/home.dart';
-import 'package:sos_restau/login.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class EmailInputFb2 extends StatefulWidget {
@@ -553,6 +551,8 @@ class RegisterPage1 extends StatelessWidget {
       TextEditingController();
   final TextEditingController _nameController = TextEditingController();
 
+  RegisterPage1({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -641,6 +641,7 @@ class RegisterPage2 extends StatelessWidget {
       TextEditingController();
 
   RegisterPage2({
+    super.key,
     required this.name,
     required this.email,
     required this.password,
