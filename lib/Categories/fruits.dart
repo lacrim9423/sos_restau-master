@@ -24,7 +24,7 @@ class _FruitCategoryPageState extends State<FruitCategoryPage> {
       name: 'Apple',
       description: 'A juicy and delicious fruit',
       price: 1.99,
-      image: 'assets/images/apple.jpg',
+      image: 'assets/images/fruits/apple.jpeg',
       available: true,
     ),
     Product(
@@ -32,7 +32,7 @@ class _FruitCategoryPageState extends State<FruitCategoryPage> {
       name: 'Banana',
       description: 'A sweet and nutritious fruit',
       price: 0.99,
-      image: 'assets/images/banana.jpg',
+      image: 'assets/images/fruits/banana.jpeg',
       available: false,
     ),
     Product(
@@ -40,7 +40,7 @@ class _FruitCategoryPageState extends State<FruitCategoryPage> {
       name: 'Orange',
       description: 'A tangy and refreshing fruit',
       price: 2.49,
-      image: 'assets/images/orange.jpg',
+      image: 'assets/images/fruits/orange.jpeg',
       available: true,
     ),
     Product(
@@ -48,7 +48,7 @@ class _FruitCategoryPageState extends State<FruitCategoryPage> {
       name: 'Strawberry',
       description: 'A small and tasty fruit',
       price: 3.99,
-      image: 'assets/images/strawberry.jpg',
+      image: 'assets/images/fruits/strawberry.jpeg',
       available: true,
     ),
   ];
@@ -62,7 +62,10 @@ class _FruitCategoryPageState extends State<FruitCategoryPage> {
   void _goToHome(BuildContext context, String userId) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => HomePage()),
+      MaterialPageRoute(
+          builder: (context) => HomePage(
+                userId: '',
+              )),
     );
   }
 

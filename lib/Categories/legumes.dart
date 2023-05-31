@@ -41,7 +41,10 @@ class _VegetablesCategoryPageState extends State<VegetablesCategoryPage> {
   void _goToHome(BuildContext context, String userId) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => const HomePage()),
+      MaterialPageRoute(
+          builder: (context) => const HomePage(
+                userId: '',
+              )),
     );
   }
 

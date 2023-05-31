@@ -28,7 +28,10 @@ class _CartPageState extends State<CartPage> {
   void _goToHome(BuildContext context, String userId) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => const HomePage()),
+      MaterialPageRoute(
+          builder: (context) => const HomePage(
+                userId: '',
+              )),
     );
   }
 
@@ -296,21 +299,21 @@ class _CartPageState extends State<CartPage> {
                         onPressed: () {
                           _decrementQuantity(cartItemId);
                         },
-                        icon: const Icon(Icons.remove),
+                        icon: const Icon(Icons.remove, color: Colors.black),
                       ),
                       Text(productQuantity.toString()),
                       IconButton(
                         onPressed: () {
                           _incrementQuantity(cartItemId);
                         },
-                        icon: const Icon(Icons.add),
+                        icon: const Icon(Icons.add, color: Colors.black),
                       ),
                       IconButton(
                         onPressed: () {
                           _deleteCartItem(
                               cartItemId, productPrice, productQuantity);
                         },
-                        icon: const Icon(Icons.delete),
+                        icon: const Icon(Icons.delete, color: Colors.black),
                       ),
                     ],
                   ),

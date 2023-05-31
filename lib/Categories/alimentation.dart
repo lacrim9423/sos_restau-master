@@ -29,7 +29,10 @@ class _GroceryCategoryPageState extends State<GroceryCategoryPage> {
   void _goToHome(BuildContext context, String userId) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => const HomePage()),
+      MaterialPageRoute(
+          builder: (context) => const HomePage(
+                userId: '',
+              )),
     );
   }
 

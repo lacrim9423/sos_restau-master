@@ -19,7 +19,10 @@ class OrderHistoryPage extends StatelessWidget {
   void _goToHome(BuildContext context, String userId) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => HomePage()),
+      MaterialPageRoute(
+          builder: (context) => HomePage(
+                userId: '',
+              )),
     );
   }
 
@@ -155,7 +158,7 @@ class OrderHistoryPage extends StatelessWidget {
           },
         ),
         bottomNavigationBar: BottomAppBar(
-          color: Colors.orange.shade50,
+          color: Colors.black,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
@@ -163,25 +166,37 @@ class OrderHistoryPage extends StatelessWidget {
                 onPressed: () {
                   _goToHome;
                 },
-                icon: const Icon(Icons.home),
+                icon: const Icon(
+                  Icons.home,
+                  color: Colors.black,
+                ),
               ),
               IconButton(
                 onPressed: () {
                   _goToPanier(context, userId);
                 },
-                icon: const Icon(Icons.shopping_cart),
+                icon: const Icon(
+                  Icons.shopping_cart,
+                  color: Colors.white,
+                ),
               ),
               IconButton(
                 onPressed: () {
                   _goToCommandes(context, userId);
                 },
-                icon: const Icon(Icons.history),
+                icon: const Icon(
+                  Icons.history,
+                  color: Colors.white,
+                ),
               ),
               IconButton(
                 onPressed: () {
                   _goToProfile(context, userId);
                 },
-                icon: const Icon(Icons.person),
+                icon: const Icon(
+                  Icons.person,
+                  color: Colors.white,
+                ),
               ),
             ],
           ),

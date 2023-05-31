@@ -276,7 +276,10 @@ class _LoginPageState extends State<LoginPage> {
         password: _passwordController.text.trim(),
       );
       Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => const HomePage()),
+        MaterialPageRoute(
+            builder: (context) => const HomePage(
+                  userId: '',
+                )),
       );
     } on FirebaseAuthException catch (e) {
       String errorMessage;
@@ -525,7 +528,7 @@ class PasswordInput extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          "Password",
+          "mot de passe",
           style: TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.normal,

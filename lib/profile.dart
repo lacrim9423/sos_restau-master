@@ -55,7 +55,10 @@ class _ProfilePageState extends State<ProfilePage> {
   void _goToHome(BuildContext context, String userId) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => const HomePage()),
+      MaterialPageRoute(
+          builder: (context) => const HomePage(
+                userId: '',
+              )),
     );
   }
 
@@ -83,15 +86,15 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  void _goToInvoices() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-          builder: (context) => InvoicePage(
-                userId: _auth.currentUser!.uid,
-              )),
-    );
-  }
+  // void _goToInvoices() {
+  // Navigator.push(
+  // context,
+  //MaterialPageRoute(
+  //  builder: (context) => InvoicePage(
+  //      userId: _auth.currentUser!.uid,
+  //  )),
+  //);
+  // }
 
   Future<void> _logOut() async {
     await _auth.signOut();
@@ -131,10 +134,10 @@ class _ProfilePageState extends State<ProfilePage> {
                 title: const Text('Order History'),
                 onTap: _goToOrderHistory,
               ),
-              ListTile(
-                title: const Text('Invoices'),
-                onTap: _goToInvoices,
-              ),
+              // ListTile(
+              // title: const Text('Invoices'),
+              //onTap: _goToInvoices,
+              // ),
               ListTile(
                 title: const Text('Switch to Dark Theme'),
                 onTap: () {},

@@ -550,6 +550,7 @@ class RegisterPage1 extends StatelessWidget {
   final TextEditingController _confirmPasswordController =
       TextEditingController();
   final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _prenomController = TextEditingController();
 
   RegisterPage1({super.key});
 
@@ -566,6 +567,12 @@ class RegisterPage1 extends StatelessWidget {
               EmailInputFb2(
                 inputController: _nameController,
                 hintText: 'Nom',
+              ),
+
+              // Prénom field
+              EmailInputFb2(
+                inputController: _prenomController,
+                hintText: 'Prénom',
               ),
               // Email field
               EmailInputFb2(
@@ -597,6 +604,7 @@ class RegisterPage1 extends StatelessWidget {
                           name: _nameController.text.trim(),
                           email: _emailController.text.trim(),
                           password: _passwordController.text.trim(),
+                          prenom: _prenomController.text.trim(),
                         ),
                       ),
                     );
@@ -633,6 +641,7 @@ class RegisterPage2 extends StatelessWidget {
   final String name;
   final String email;
   final String password;
+  final String prenom;
 
   final TextEditingController _restaurantController = TextEditingController();
   final TextEditingController _addressController = TextEditingController();
@@ -645,6 +654,7 @@ class RegisterPage2 extends StatelessWidget {
     required this.name,
     required this.email,
     required this.password,
+    required this.prenom,
   });
 
   @override
@@ -754,12 +764,16 @@ class RegisterPage2 extends StatelessWidget {
         'addresse': _addressController.text.trim(),
         'phone': _phoneNumberController.text.trim(),
         'registre': _licenseNumberController.text.trim(),
+        'prenom': prenom,
       });
 
       // Navigate to home page or any other desired screen
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const HomePage()),
+        MaterialPageRoute(
+            builder: (context) => const HomePage(
+                  userId: '',
+                )),
       );
     } catch (e) {
       // Handle registration errors

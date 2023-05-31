@@ -26,7 +26,10 @@ class _DairyCategoryPageState extends State<DairyCategoryPage> {
   void _goToHome(BuildContext context, String userId) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => HomePage()),
+      MaterialPageRoute(
+          builder: (context) => HomePage(
+                userId: '',
+              )),
     );
   }
 
