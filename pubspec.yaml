@@ -51,6 +51,8 @@ dependencies:
   webview_flutter: ^4.2.0
   url_launcher: ^6.1.11
   flutter_pdfview: ^1.3.1
+  fluttertoast: ^8.0.7
+  http: ^0.13.3
 
 dev_dependencies:
   flutter_test:
@@ -84,7 +86,6 @@ flutter:
      - assets/images/hygiene.jpg
      - assets/images/grocery.jpg
      - assets/images/fruits.jpg
-
      - assets/images/fruits/watermelon.jpeg
      - assets/images/fruits/peach.jpeg
      - assets/images/fruits/pineapple.jpeg
@@ -95,7 +96,35 @@ flutter:
      - assets/images/fruits/kiwi.jpeg
      - assets/images/fruits/grape.jpeg
      - assets/images/fruits/banana.jpeg
-
+     - assets/images/legumes/carotte.jpg
+     - assets/images/legumes/ail.jpg
+     - assets/images/legumes/aubergine.jpg
+     - assets/images/legumes/tomate.jpg
+     - assets/images/legumes/courgette.jpg
+     - assets/images/legumes/oignon.jpg
+     - assets/images/legumes/salade.jpg
+     - assets/images/legumes/artichaut.jpg
+     - assets/images/legumes/betterave.jpg
+     - assets/images/legumes/brocoli.jpg
+     - assets/images/legumes/champignon.jpg
+     - assets/images/legumes/chou.jpg
+     - assets/images/legumes/chou_fleur.jpg
+     - assets/images/legumes/courgette.jpg
+     - assets/images/legumes/haricot.jpg
+     - assets/images/legumes/mais.jpg
+     - assets/images/legumes/melon.jpg
+     - assets/images/legumes/pimentrouge.jpg
+     - assets/images/legumes/poivron.jpg
+     - assets/images/pain/burger.jpg
+     - assets/images/pain/chapati.jpg
+     - assets/images/pain/chawarma.jpg
+     - assets/images/pain/kesra.jpg
+     - assets/images/pain/kesra2.jpg
+     - assets/images/pain/demi_baguette.jpg
+     - assets/images/pain/painfrançais.jpg
+     - assets/images/pain/panini.jpg
+     - assets/images/pain/petit_pain.jpg
+     - assets/images/pain/tortilla.jpg
 
 
 

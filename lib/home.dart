@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:sos_restau/Categories/alimentation.dart';
 import 'package:sos_restau/Categories/boissons.dart';
@@ -52,7 +53,6 @@ class HomePage extends StatelessWidget {
     final user = FirebaseAuth.instance.currentUser;
     final userId = user?.uid ?? '';
     TextEditingController searchController = TextEditingController();
-    final _formKey = GlobalKey<FormState>();
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
@@ -61,7 +61,7 @@ class HomePage extends StatelessWidget {
             backgroundColor: Colors.black,
             title: Row(
               children: const [
-                Text('Grocery Delivery'),
+                Text('Sos REstau'),
               ],
             ),
             actions: const [
@@ -73,148 +73,194 @@ class HomePage extends StatelessWidget {
               Text('John Doe'),
               SizedBox(width: 16),
             ],
-          ),
-          backgroundColor: Colors.amber,
-          body: SingleChildScrollView(
-            child: Form(
-              key: _formKey,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  PreferredSize(
-                    preferredSize: const Size.fromHeight(48),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: TextField(
-                        controller: searchController,
-                        decoration: InputDecoration(
-                          hintText: 'Search for products',
-                          filled: true,
-                          fillColor: Colors.white,
-                          suffixIcon: const Icon(Icons.search),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(24),
-                          ),
-                        ),
-                      ),
+            bottom: PreferredSize(
+              preferredSize: const Size.fromHeight(48),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: TextField(
+                  controller: searchController,
+                  decoration: InputDecoration(
+                    hintText: 'Recherche des produits',
+                    filled: true,
+                    fillColor: Colors.white,
+                    suffixIcon: const Icon(Icons.search),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(24),
                     ),
                   ),
-                  Padding(
-                      padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
-                      child: Row(
-                        children: [
-                          const Expanded(
-                            flex: 1,
-                            child: Text(
-                              'Catégories',
-                              style: TextStyle(
-                                fontSize: 24,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                          Expanded(
-                              flex: 1,
-                              child: TextButton(
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            const AllCategoriesPage()),
-                                  );
-                                },
-                                child: const Text('Voir Tout',
-                                    style: TextStyle(
-                                        color:
-                                            Color.fromARGB(255, 234, 241, 246)),
-                                    textAlign: TextAlign.end),
-                              )),
-                        ],
-                      )),
-                  SizedBox(
-                    height: 120,
-                    child: ListView(
-                      scrollDirection: Axis.horizontal,
-                      children: [
-                        _CategoryCard(
-                          image: 'assets/images/fruits.jpg',
-                          title: 'Fruits',
-                          onTap: () => _goToFruitsCategoryPage(context),
-                        ),
-                        _CategoryCard(
-                          image: 'assets/images/veggies.jpg',
-                          title: 'Veggies',
-                          onTap: () => _goToVeggiesCategoryPage(context),
-                        ),
-                        _CategoryCard(
-                          image: 'assets/images/bread.jpg',
-                          title: 'Bread',
-                          onTap: () => _goToBreadCategoryPage(context),
-                        ),
-                        _CategoryCard(
-                          image: 'assets/images/drinks.jpg',
-                          title: 'Drinks',
-                          onTap: () => _goToDrinksCategoryPage(context),
-                        ),
-                        _CategoryCard(
-                          image: 'assets/images/grocery.jpg',
-                          title: 'Grocery',
-                          onTap: () => _goToGroceryCategoryPage(context),
-                        ),
-                        _CategoryCard(
-                          image: 'assets/images/meat.jpg',
-                          title: 'Meat',
-                          onTap: () => _goToMeatCategoryPage(context),
-                        ),
-                        _CategoryCard(
-                          image: 'assets/images/dairy.jpg',
-                          title: 'Dairy',
-                          onTap: () => _goToDairyCategoryPage(context),
-                        ),
-                        _CategoryCard(
-                          image: 'assets/images/hygiene.jpg',
-                          title: 'Hygiene',
-                          onTap: () => _goToHygieneCategoryPage(context),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
+                ),
               ),
             ),
           ),
+          backgroundColor: Color.fromARGB(150, 255, 239, 190),
+          body: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(height: 15),
+                Center(
+                  child: SizedBox(
+                    width: MediaQuery.of(context).size.width *
+                        0.6, // Take 60% of the screen width
+                    child: Container(
+                      height: 120,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(15),
+                        gradient: const LinearGradient(
+                          colors: [
+                            Color.fromARGB(255, 83, 110, 232),
+                            Color.fromARGB(255, 21, 38, 190)
+                          ],
+                        ),
+                      ),
+                      child: Stack(
+                        children: [
+                          Opacity(
+                            opacity: 0.5,
+                            child: Image.network(
+                              "https://firebasestorage.googleapis.com/v0/b/flutterbricks-public.appspot.com/o/BACKGROUND%202.png?alt=media&token=0d003860-ba2f-4782-a5ee-5d5684cdc244",
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                          Image.network(
+                            "https://firebasestorage.googleapis.com/v0/b/flutterbricks-public.appspot.com/o/Image.png?alt=media&token=8256c357-cf86-4f76-8c4d-4322d1ebc06c",
+                          ),
+                          const Align(
+                            alignment: Alignment.topRight,
+                            child: Padding(
+                              padding: EdgeInsets.all(25.0),
+                              child: Text(
+                                "Promo\néte",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 22,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 10),
+                Padding(
+                    padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+                    child: Row(
+                      children: [
+                        const Expanded(
+                          flex: 1,
+                          child: Text(
+                            'Catégories',
+                            style: TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                            flex: 1,
+                            child: TextButton(
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const AllCategoriesPage()),
+                                );
+                              },
+                              child: const Text('Voir Tout',
+                                  style: TextStyle(color: Colors.blue),
+                                  textAlign: TextAlign.end),
+                            )),
+                      ],
+                    )),
+                SizedBox(
+                  height: 260, // Adjust the height as needed
+                  child: GridView.count(
+                    crossAxisCount: 4, // Number of columns
+                    childAspectRatio: 1.0, // Width to height ratio of each item
+                    padding: const EdgeInsets.all(8),
+                    children: [
+                      _CategoryCard(
+                        image: 'assets/images/fruits.jpg',
+                        title: 'Fruits',
+                        onTap: () => _goToFruitsCategoryPage(context),
+                      ),
+                      _CategoryCard(
+                        image: 'assets/images/veggies.jpg',
+                        title: 'Légumes',
+                        onTap: () => _goToVeggiesCategoryPage(context),
+                      ),
+                      _CategoryCard(
+                        image: 'assets/images/bread.jpg',
+                        title: 'Pain',
+                        onTap: () => _goToBreadCategoryPage(context),
+                      ),
+                      _CategoryCard(
+                        image: 'assets/images/drinks.jpg',
+                        title: 'Boissons',
+                        onTap: () => _goToDrinksCategoryPage(context),
+                      ),
+                      _CategoryCard(
+                        image: 'assets/images/grocery.jpg',
+                        title: 'Allimentation',
+                        onTap: () => _goToGroceryCategoryPage(context),
+                      ),
+                      _CategoryCard(
+                        image: 'assets/images/meat.jpg',
+                        title: 'Viande',
+                        onTap: () => _goToMeatCategoryPage(context),
+                      ),
+                      _CategoryCard(
+                        image: 'assets/images/dairy.jpg',
+                        title: 'Produits liatter',
+                        onTap: () => _goToDairyCategoryPage(context),
+                      ),
+                      _CategoryCard(
+                        image: 'assets/images/hygiene.jpg',
+                        title: 'Hygiene',
+                        onTap: () => _goToHygieneCategoryPage(context),
+                      ),
+                    ],
+                  ),
+                )
+              ],
+            ),
+          ),
           bottomNavigationBar: BottomAppBar(
-            color: Colors.black,
+            color: Color.fromARGB(255, 0, 0, 0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 IconButton(
+                  color: Color.fromARGB(150, 255, 239, 190),
                   onPressed: () {
                     _goToHome;
                   },
-                  icon: const Icon(
-                    Icons.home,
-                    color: Colors.white,
-                  ),
+                  icon: const Icon(Icons.home),
                 ),
                 IconButton(
+                  color: Color.fromARGB(150, 255, 239, 190),
                   onPressed: () {
                     _goToPanier(context, userId);
                   },
-                  icon: const Icon(Icons.shopping_cart, color: Colors.white),
+                  icon: const Icon(Icons.shopping_cart),
                 ),
                 IconButton(
+                  color: Color.fromARGB(150, 255, 239, 190),
                   onPressed: () {
                     _goToCommandes(context, userId);
                   },
-                  icon: const Icon(Icons.history, color: Colors.white),
+                  icon: const Icon(Icons.history),
                 ),
                 IconButton(
+                  color: Color.fromARGB(150, 255, 239, 190),
                   onPressed: () {
                     _goToProfile(context, userId);
                   },
-                  icon: const Icon(Icons.person, color: Colors.white),
+                  icon: const Icon(Icons.person),
                 ),
               ],
             ),

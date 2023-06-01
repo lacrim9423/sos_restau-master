@@ -164,11 +164,11 @@ class OrderHistoryPage extends StatelessWidget {
             children: [
               IconButton(
                 onPressed: () {
-                  _goToHome;
+                  _goToHome(context, userId);
                 },
                 icon: const Icon(
                   Icons.home,
-                  color: Colors.black,
+                  color: Colors.white,
                 ),
               ),
               IconButton(

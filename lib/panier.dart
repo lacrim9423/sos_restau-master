@@ -17,12 +17,31 @@ class CartPage extends StatefulWidget {
 }
 
 class _CartPageState extends State<CartPage> {
-  late double totalPrice;
+  double totalPrice = 0.0;
 
   @override
   void initState() {
     super.initState();
-    totalPrice = 0.0;
+    calculateTotalPrice(); // Calculate the initial total price
+  }
+
+  void calculateTotalPrice() async {
+    final snapshot = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(widget.userId)
+        .collection('panier')
+        .get();
+
+    double total = 0.0;
+    for (final doc in snapshot.docs) {
+      final quantity = doc.get('quantity');
+      final price = doc.get('price');
+      total += quantity * price;
+    }
+
+    setState(() {
+      totalPrice = total;
+    });
   }
 
   void _goToHome(BuildContext context, String userId) {
@@ -281,14 +300,19 @@ class _CartPageState extends State<CartPage> {
               final imageUrl = cartItem.get('image');
 
               return Card(
+                surfaceTintColor: Color.fromARGB(138, 162, 159, 151),
                 elevation: 4,
                 margin: const EdgeInsets.symmetric(vertical: 8),
                 child: ListTile(
                   leading: Image.network(
-                    imageUrl,
+                    imageUrl ?? 'placeholder_image_url',
                     width: 80,
                     height: 80,
                     fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) {
+                      return const Icon(Icons
+                          .error); // Display an error icon or custom widget
+                    },
                   ),
                   title: Text(productName),
                   subtitle: Text('Price: \$${productPrice.toStringAsFixed(2)}'),
@@ -323,12 +347,34 @@ class _CartPageState extends State<CartPage> {
           );
         },
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
-          showOrderDurationDialog(context);
-        },
-        label: const Text('Valider Le Panier'),
-        icon: const Icon(Icons.check),
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(width: 1, color: Colors.grey),
+              ),
+              padding: const EdgeInsets.all(8),
+              child: Text(
+                'Total: \$${totalPrice.toStringAsFixed(2)}',
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            FloatingActionButton.extended(
+              onPressed: () {
+                showOrderDurationDialog(context);
+              },
+              label: const Text('Valider Le Panier'),
+              icon: const Icon(Icons.check),
+            ),
+          ],
+        ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
