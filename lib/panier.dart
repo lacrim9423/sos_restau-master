@@ -1,4 +1,4 @@
-// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: use_build_context_synchronously, library_private_types_in_public_api
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -300,7 +300,7 @@ class _CartPageState extends State<CartPage> {
               final imageUrl = cartItem.get('image');
 
               return Card(
-                surfaceTintColor: Color.fromARGB(138, 162, 159, 151),
+                surfaceTintColor: const Color.fromARGB(138, 162, 159, 151),
                 elevation: 4,
                 margin: const EdgeInsets.symmetric(vertical: 8),
                 child: ListTile(
@@ -346,6 +346,42 @@ class _CartPageState extends State<CartPage> {
             },
           );
         },
+      ),
+      bottomNavigationBar: BottomAppBar(
+        color: const Color.fromARGB(255, 0, 0, 0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            IconButton(
+              color: const Color.fromARGB(150, 255, 239, 190),
+              onPressed: () {
+                _goToHome;
+              },
+              icon: const Icon(Icons.home),
+            ),
+            IconButton(
+              color: const Color.fromARGB(150, 255, 239, 190),
+              onPressed: () {
+                _goToPanier(context, userId);
+              },
+              icon: const Icon(Icons.shopping_cart),
+            ),
+            IconButton(
+              color: const Color.fromARGB(150, 255, 239, 190),
+              onPressed: () {
+                _goToCommandes(context, userId);
+              },
+              icon: const Icon(Icons.history),
+            ),
+            IconButton(
+              color: const Color.fromARGB(150, 255, 239, 190),
+              onPressed: () {
+                _goToProfile(context, userId);
+              },
+              icon: const Icon(Icons.person),
+            ),
+          ],
+        ),
       ),
       floatingActionButton: Padding(
         padding: const EdgeInsets.all(16.0),

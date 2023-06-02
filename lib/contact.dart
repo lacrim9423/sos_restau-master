@@ -1,9 +1,13 @@
+// ignore_for_file: unused_local_variable
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class ContactPage extends StatelessWidget {
   final TextEditingController subjectController = TextEditingController();
   final TextEditingController messageController = TextEditingController();
+
+  ContactPage({super.key});
 
   void copyToClipboard(String text) {
     Clipboard.setData(ClipboardData(text: text));
@@ -29,39 +33,39 @@ class ContactPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Contactez-nous'),
+        title: const Text('Contactez-nous'),
       ),
       body: Padding(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
             ListTile(
-              title: Text('Numéro de téléphone'),
-              subtitle: Text('+1234567890'),
+              title: const Text('Numéro de téléphone'),
+              subtitle: const Text('+1234567890'),
               trailing: IconButton(
-                icon: Icon(Icons.copy),
+                icon: const Icon(Icons.copy),
                 onPressed: () {
                   copyToClipboard('+1234567890');
                 },
               ),
             ),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
             TextField(
               controller: subjectController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Sujet',
               ),
             ),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
             TextField(
               controller: messageController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Message',
               ),
             ),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
             ElevatedButton(
-              child: Text('Soumettre la réclamation'),
+              child: const Text('Soumettre la réclamation'),
               onPressed: () {
                 submitForm();
               },

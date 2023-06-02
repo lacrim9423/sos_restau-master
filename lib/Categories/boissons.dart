@@ -2,9 +2,9 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:sos_restau/class/drink.dart';
-import 'package:sos_restau/hha.dart';
 import 'package:sos_restau/models/drink_card.dart';
 import 'package:sos_restau/historique.dart';
 import 'package:sos_restau/home.dart';
@@ -37,7 +37,7 @@ class _DrinkCategoryPageState extends State<DrinkCategoryPage> {
     Navigator.push(
       context,
       MaterialPageRoute(
-          builder: (context) => HomePage(
+          builder: (context) => const HomePage(
                 userId: '',
               )),
     );
@@ -87,7 +87,9 @@ class _DrinkCategoryPageState extends State<DrinkCategoryPage> {
         _drinks = drinks;
       });
     }).catchError((error) {
-      print('Failed to fetch drinks: $error');
+      if (kDebugMode) {
+        print('Failed to fetch drinks: $error');
+      }
     });
   }
 
@@ -128,7 +130,7 @@ class _DrinkCategoryPageState extends State<DrinkCategoryPage> {
           children: [
             IconButton(
               onPressed: () {
-                ;
+                
               },
               icon: const Icon(Icons.person),
             ),

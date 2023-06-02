@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:sos_restau/Categories/alimentation.dart';
 import 'package:sos_restau/Categories/boissons.dart';
@@ -92,12 +91,12 @@ class HomePage extends StatelessWidget {
               ),
             ),
           ),
-          backgroundColor: Color.fromARGB(150, 255, 239, 190),
+          backgroundColor: const Color.fromARGB(150, 255, 239, 190),
           body: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(height: 15),
+                const SizedBox(height: 15),
                 Center(
                   child: SizedBox(
                     width: MediaQuery.of(context).size.width *
@@ -230,33 +229,33 @@ class HomePage extends StatelessWidget {
             ),
           ),
           bottomNavigationBar: BottomAppBar(
-            color: Color.fromARGB(255, 0, 0, 0),
+            color: const Color.fromARGB(255, 0, 0, 0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 IconButton(
-                  color: Color.fromARGB(150, 255, 239, 190),
+                  color: const Color.fromARGB(150, 255, 239, 190),
                   onPressed: () {
                     _goToHome;
                   },
                   icon: const Icon(Icons.home),
                 ),
                 IconButton(
-                  color: Color.fromARGB(150, 255, 239, 190),
+                  color: const Color.fromARGB(150, 255, 239, 190),
                   onPressed: () {
                     _goToPanier(context, userId);
                   },
                   icon: const Icon(Icons.shopping_cart),
                 ),
                 IconButton(
-                  color: Color.fromARGB(150, 255, 239, 190),
+                  color: const Color.fromARGB(150, 255, 239, 190),
                   onPressed: () {
                     _goToCommandes(context, userId);
                   },
                   icon: const Icon(Icons.history),
                 ),
                 IconButton(
-                  color: Color.fromARGB(150, 255, 239, 190),
+                  color: const Color.fromARGB(150, 255, 239, 190),
                   onPressed: () {
                     _goToProfile(context, userId);
                   },

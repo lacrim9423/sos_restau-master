@@ -111,7 +111,7 @@ class _FruitCategoryPageState extends State<FruitCategoryPage> {
     Navigator.push(
       context,
       MaterialPageRoute(
-          builder: (context) => HomePage(
+          builder: (context) => const HomePage(
                 userId: '',
               )),
     );

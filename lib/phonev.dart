@@ -41,7 +41,7 @@ class _PhoneVerificationPageState extends State<PhoneVerificationPage> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => HomePage(
+                      builder: (context) => const HomePage(
                             userId: '',
                           )),
                 );

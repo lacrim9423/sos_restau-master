@@ -27,7 +27,7 @@ class _DairyCategoryPageState extends State<DairyCategoryPage> {
     Navigator.push(
       context,
       MaterialPageRoute(
-          builder: (context) => HomePage(
+          builder: (context) => const HomePage(
                 userId: '',
               )),
     );
