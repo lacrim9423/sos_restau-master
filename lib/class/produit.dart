@@ -19,7 +19,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Product {
-  final String id;
   final String name;
   final String image;
   final double price;
@@ -27,18 +26,10 @@ class Product {
   final String description;
 
   Product({
-    required this.id,
     required this.name,
     required this.image,
     required this.price,
     required this.available,
     required this.description,
   });
-
-  Future<int> getQuantity() async {
-    final snapshot =
-        await FirebaseFirestore.instance.collection('hygiene').doc(id).get();
-    final data = snapshot.data() as Map<String, dynamic>;
-    return data['quantity'] as int;
-  }
 }

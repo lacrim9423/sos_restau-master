@@ -1,6 +1,8 @@
 // ignore_for_file: library_private_types_in_public_api
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 
 import 'package:flutter/material.dart';
 import 'package:sos_restau/models/product_card.dart';
@@ -18,88 +20,41 @@ class FruitCategoryPage extends StatefulWidget {
 }
 
 class _FruitCategoryPageState extends State<FruitCategoryPage> {
-  final List<Product> _products = [
-    Product(
-      id: "1",
-      name: 'Apple',
-      description: 'A juicy and delicious fruit',
-      price: 1.99,
-      image: 'assets/images/fruits/apple.jpeg',
-      available: true,
-    ),
-    Product(
-      id: '2',
-      name: 'Banana',
-      description: 'A sweet and nutritious fruit',
-      price: 0.99,
-      image: 'assets/images/fruits/banana.jpeg',
-      available: false,
-    ),
-    Product(
-      id: '3',
-      name: 'Orange',
-      description: 'A tangy and refreshing fruit',
-      price: 2.49,
-      image: 'assets/images/fruits/orange.jpeg',
-      available: true,
-    ),
-    Product(
-      id: '4',
-      name: 'Strawberry',
-      description: 'A small and tasty fruit',
-      price: 3.99,
-      image: 'assets/images/fruits/strawberry.jpeg',
-      available: true,
-    ),
-    Product(
-      id: '5',
-      name: 'mango',
-      description: 'A small and tasty fruit',
-      price: 3.99,
-      image: 'assets/images/fruits/mango.jpeg',
-      available: true,
-    ),
-    Product(
-      id: '6',
-      name: 'peach',
-      description: 'A small and tasty fruit',
-      price: 3.99,
-      image: 'assets/images/fruits/peach.jpeg',
-      available: true,
-    ),
-    Product(
-      id: '7',
-      name: 'pineapple',
-      description: 'A small and tasty fruit',
-      price: 3.99,
-      image: 'assets/images/fruits/pineapple.jpeg',
-      available: true,
-    ),
-    Product(
-      id: '8',
-      name: 'watermelon',
-      description: 'A small and tasty fruit',
-      price: 3.99,
-      image: 'assets/images/fruits/watermelon.jpeg',
-      available: true,
-    ),
-    Product(
-      id: '9',
-      name: 'kiwi',
-      description: 'A small and tasty fruit',
-      price: 5.99,
-      image: 'assets/images/fruits/kiwi.jpeg',
-      available: true,
-    ),
-    Product(
-      id: '10',
-      name: 'grape',
-      description: 'A small and tasty fruit',
-      price: 1.50,
-      image: 'assets/images/fruits/grape.jpeg',
-      available: true,
-    ),
-  ];
+  final List<Product> _products = [];
+  void _fetchFruitsFromFirestore() {
+    FirebaseFirestore.instance
+        .collection('Products')
+        .where('catégorie', isEqualTo: 'fruits')
+        .get()
+        .then((querySnapshot) {
+      final fruits = querySnapshot.docs.map((doc) {
+        final data = doc.data();
+
+        return Product(
+          name: data['nom'],
+          description: data['description'],
+          price: data['prix'],
+          image: data['image'],
+          available: data['disponible'],
+        );
+      }).toList();
+
+      setState(() {
+        _products.addAll(fruits);
+      });
+    }).catchError((error) {
+      if (kDebugMode) {
+        print('Failed to fetch fruits: $error');
+      }
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchFruitsFromFirestore();
+  }
+
   void _goToPanier(BuildContext context, String userId) {
     Navigator.push(
       context,
@@ -110,10 +65,7 @@ class _FruitCategoryPageState extends State<FruitCategoryPage> {
   void _goToHome(BuildContext context, String userId) {
     Navigator.push(
       context,
-      MaterialPageRoute(
-          builder: (context) => const HomePage(
-                userId: '',
-              )),
+      MaterialPageRoute(builder: (context) => HomePage()),
     );
   }
 

@@ -4,12 +4,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:sos_restau/class/drink.dart';
-import 'package:sos_restau/models/drink_card.dart';
+import 'package:sos_restau/class/produit.dart';
 import 'package:sos_restau/historique.dart';
 import 'package:sos_restau/home.dart';
 import 'package:sos_restau/panier.dart';
 import 'package:sos_restau/profile.dart';
+
+import '../models/product_card.dart';
 
 class DrinkCategoryPage extends StatefulWidget {
   const DrinkCategoryPage({Key? key}) : super(key: key);
@@ -36,10 +37,7 @@ class _DrinkCategoryPageState extends State<DrinkCategoryPage> {
   void _goToHome(BuildContext context, String userId) {
     Navigator.push(
       context,
-      MaterialPageRoute(
-          builder: (context) => const HomePage(
-                userId: '',
-              )),
+      MaterialPageRoute(builder: (context) => HomePage()),
     );
   }
 
@@ -50,47 +48,39 @@ class _DrinkCategoryPageState extends State<DrinkCategoryPage> {
     );
   }
 
-  Future<List<Drink>> fetchDrinksFromFirestore() async {
-    final drinksCollection = FirebaseFirestore.instance.collection('drinks');
-    final querySnapshot = await drinksCollection.get();
+  final List<Product> _products = [];
+  void _fetchBoissonsFromFirestore() {
+    FirebaseFirestore.instance
+        .collection('Products')
+        .where('catégorie', isEqualTo: 'boissons')
+        .get()
+        .then((querySnapshot) {
+      final boissons = querySnapshot.docs.map((doc) {
+        final data = doc.data();
 
-    final drinks = querySnapshot.docs.map((doc) {
-      final data = doc.data();
-      final flavors = (data['flavors'] as List)
-          .map((flavor) => Flavor(
-                id: flavor['id'],
-                name: flavor['name'],
-              ))
-          .toList();
+        return Product(
+          name: data['nom'],
+          description: data['description'],
+          price: data['prix'],
+          image: data['image'],
+          available: data['disponible'],
+        );
+      }).toList();
 
-      return Drink(
-        id: doc.id,
-        name: data['name'],
-        description: data['description'],
-        price: data['price'],
-        image: data['image'],
-        available: data['available'],
-        flavors: flavors,
-      );
-    }).toList();
-
-    return drinks;
+      setState(() {
+        _products.addAll(boissons);
+      });
+    }).catchError((error) {
+      if (kDebugMode) {
+        print('Failed to fetch boissons: $error');
+      }
+    });
   }
-
-  List<Drink> _drinks = [];
 
   @override
   void initState() {
     super.initState();
-    fetchDrinksFromFirestore().then((drinks) {
-      setState(() {
-        _drinks = drinks;
-      });
-    }).catchError((error) {
-      if (kDebugMode) {
-        print('Failed to fetch drinks: $error');
-      }
-    });
+    _fetchBoissonsFromFirestore();
   }
 
   @override
@@ -109,12 +99,11 @@ class _DrinkCategoryPageState extends State<DrinkCategoryPage> {
           mainAxisSpacing: 8,
           crossAxisSpacing: 8,
         ),
-        itemCount: _drinks.length,
+        itemCount: _products.length,
         itemBuilder: (BuildContext context, int index) {
-          final drink = _drinks[index];
-          return DrinkCard(
-            key: ValueKey(drink.id),
-            drink: drink,
+          final drink = _products[index];
+          return ProductCard(
+            product: drink,
             title: drink.name,
             description: drink.description,
             imageUrl: drink.image,
@@ -130,13 +119,8 @@ class _DrinkCategoryPageState extends State<DrinkCategoryPage> {
           children: [
             IconButton(
               onPressed: () {
-                
-              },
-              icon: const Icon(Icons.person),
-            ),
-            IconButton(
-              onPressed: () {
-                _goToHome;
+                _goToHome(context,
+                    userId); // Invoke the function by adding parentheses and passing context and userId
               },
               icon: const Icon(Icons.home),
             ),

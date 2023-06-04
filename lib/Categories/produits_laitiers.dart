@@ -1,17 +1,169 @@
+// import 'package:cloud_firestore/cloud_firestore.dart';
+// import 'package:firebase_auth/firebase_auth.dart';
+// import 'package:flutter/foundation.dart';
+// import 'package:flutter/material.dart';
+// import 'package:sos_restau/class/produit.dart';
+// import 'package:sos_restau/historique.dart';
+// import 'package:sos_restau/home.dart';
+// import 'package:sos_restau/models/product_card.dart';
+// import 'package:sos_restau/panier.dart';
+// import 'package:sos_restau/profile.dart';
+
+// class DairyCategoryPage extends StatefulWidget {
+//   const DairyCategoryPage({super.key});
+
+//   @override
+//   // ignore: library_private_types_in_public_api
+//   _DairyCategoryPageState createState() => _DairyCategoryPageState();
+// }
+
+// class _DairyCategoryPageState extends State<DairyCategoryPage> {
+//   void _goToPanier(BuildContext context, String userId) {
+//     Navigator.push(
+//       context,
+//       MaterialPageRoute(builder: (context) => CartPage(userId: userId)),
+//     );
+//   }
+
+//   void _goToHome(BuildContext context, String userId) {
+//     Navigator.push(
+//       context,
+//       MaterialPageRoute(builder: (context) => HomePage()),
+//     );
+//   }
+
+//   void _goToCommandes(BuildContext context, String userId) {
+//     Navigator.push(
+//       context,
+//       MaterialPageRoute(builder: (context) => OrderHistoryPage(userId: userId)),
+//     );
+//   }
+
+//   void _goToProfile(BuildContext context, String userId) {
+//     Navigator.push(
+//       context,
+//       MaterialPageRoute(builder: (context) => const ProfilePage()),
+//     );
+//   }
+
+//   final List<Product> _products = [];
+//   void _fetchlaitiersFromFirestore() {
+//     FirebaseFirestore.instance
+//         .collection('Products')
+//         .where('catégorie', isEqualTo: 'laitiers')
+//         .get()
+//         .then((querySnapshot) {
+//       final laitiers = querySnapshot.docs.map((doc) {
+//         final data = doc.data();
+
+//         return Product(
+//           name: data['nom'],
+//           description: data['description'],
+//           price: data['prix'],
+//           image: data['image'],
+//           available: data['disponible'],
+//         );
+//       }).toList();
+
+//       setState(() {
+//         _products.addAll(laitiers);
+//       });
+//     }).catchError((error) {
+//       if (kDebugMode) {
+//         print('Failed to fetch laitiers: $error');
+//       }
+//     });
+//   }
+
+//   @override
+//   void initState() {
+//     super.initState();
+//     _fetchlaitiersFromFirestore();
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     final user = FirebaseAuth.instance.currentUser;
+//     final userId = user?.uid ?? '';
+
+//     return Scaffold(
+//         appBar: AppBar(
+//           title: const Text('Lait et Dérivés'),
+//         ),
+//         body: GridView.builder(
+//           padding: const EdgeInsets.all(8),
+//           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+//             crossAxisCount: 2,
+//             childAspectRatio: 0.7,
+//             mainAxisSpacing: 8,
+//             crossAxisSpacing: 8,
+//           ),
+//           itemCount: _products.length,
+//           itemBuilder: (context, index) {
+//             final dairyProduct = _products[index];
+//             return ProductCard(
+//               product: dairyProduct,
+//               available: dairyProduct.available,
+//               description: dairyProduct.description,
+//               imageUrl: dairyProduct.image,
+//               price: dairyProduct.price,
+//               title: dairyProduct.name,
+//             );
+//           },
+//         ),
+//         bottomNavigationBar: BottomAppBar(
+//           color: Colors.orange.shade50,
+//           child: Row(
+//             mainAxisAlignment: MainAxisAlignment.spaceAround,
+//             children: [
+//               IconButton(
+//                 onPressed: () {
+//                   _goToHome;
+//                 },
+//                 icon: const Icon(Icons.home),
+//               ),
+//               IconButton(
+//                 onPressed: () {
+//                   _goToPanier(context, userId);
+//                 },
+//                 icon: const Icon(Icons.shopping_cart),
+//               ),
+//               IconButton(
+//                 onPressed: () {
+//                   _goToCommandes(context, userId);
+//                 },
+//                 icon: const Icon(Icons.history),
+//               ),
+//               IconButton(
+//                 onPressed: () {
+//                   _goToProfile(context, userId);
+//                 },
+//                 icon: const Icon(Icons.person),
+//               ),
+//             ],
+//           ),
+//         ));
+//   }
+// }
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:sos_restau/class/p_laitiers.dart';
-import 'package:sos_restau/models/p_laitiers_card.dart';
+import 'package:sos_restau/class/pain.dart';
+import 'package:sos_restau/class/produit.dart';
+import 'package:sos_restau/models/pain_card.dart';
 import 'package:sos_restau/historique.dart';
 import 'package:sos_restau/home.dart';
 import 'package:sos_restau/panier.dart';
 import 'package:sos_restau/profile.dart';
 
+import '../models/product_card.dart';
+
 class DairyCategoryPage extends StatefulWidget {
-  const DairyCategoryPage({super.key});
+  const DairyCategoryPage({Key? key}) : super(key: key);
 
   @override
-  // ignore: library_private_types_in_public_api
   _DairyCategoryPageState createState() => _DairyCategoryPageState();
 }
 
@@ -23,20 +175,17 @@ class _DairyCategoryPageState extends State<DairyCategoryPage> {
     );
   }
 
-  void _goToHome(BuildContext context, String userId) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-          builder: (context) => const HomePage(
-                userId: '',
-              )),
-    );
-  }
-
   void _goToCommandes(BuildContext context, String userId) {
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => OrderHistoryPage(userId: userId)),
+    );
+  }
+
+  void _goToHome(BuildContext context, String userId) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => HomePage()),
     );
   }
 
@@ -47,95 +196,53 @@ class _DairyCategoryPageState extends State<DairyCategoryPage> {
     );
   }
 
-  final List<DairyProduct> _dairyProducts = [
-    const DairyProduct(
-      id: '1',
-      name: 'Lait écrémé',
-      description: 'Lait demi-écrémé, idéal pour un petit déjeuner équilibré.',
-      image: 'assets/images/milk.png',
-      price: 0.99,
-      available: true,
-      units: [
-        Unit.pack,
-      ],
-      isLiquid: true,
-    ),
-    const DairyProduct(
-      id: '2',
-      name: 'Fromage de chèvre',
-      description: 'Fromage de chèvre frais, parfait pour vos salades.',
-      image: 'assets/images/goat_cheese.png',
-      price: 3.99,
-      available: true,
-      units: [Unit.kilogram],
-      isLiquid: false,
-    ),
-    const DairyProduct(
-      id: '3',
-      name: 'Sauce au fromage',
-      description:
-          'Sauce onctueuse à base de fromage, idéale pour vos plats de pâtes.',
-      image: 'assets/images/cheese_sauce.png',
-      price: 2.49,
-      available: false,
-      units: [Unit.kilogram],
-      isLiquid: false,
-    ),
-    const DairyProduct(
-      id: '4',
-      name: 'Yaourt nature',
-      description:
-          'Yaourt nature onctueux, parfait pour accompagner vos fruits.',
-      image: 'assets/images/yogurt.png',
-      price: 1.49,
-      available: true,
-      units: [Unit.pack],
-      isLiquid: true,
-    ),
-    const DairyProduct(
-      id: '5',
-      name: 'Beurre doux',
-      description:
-          'Beurre doux de qualité, idéal pour vos préparations culinaires.',
-      image: 'assets/images/butter.png',
-      price: 2.99,
-      available: true,
-      units: [Unit.pack],
-      isLiquid: false,
-    ),
-    const DairyProduct(
-      id: '6',
-      name: 'Crème fraîche',
-      description:
-          'Crème fraîche épaisse, parfaite pour vos sauces et desserts.',
-      image: 'assets/images/cream.png',
-      price: 1.79,
-      available: true,
-      units: [Unit.pack],
-      isLiquid: false,
-    ),
-    const DairyProduct(
-      id: '7',
-      name: 'Fromage blanc',
-      description: 'Fromage blanc crémeux, idéal pour vos recettes légères.',
-      image: 'assets/images/cottage_cheese.png',
-      price: 2.29,
-      available: true,
-      units: [Unit.pack],
-      isLiquid: true,
-    ),
-    const DairyProduct(
-      id: '8',
-      name: 'Crème glacée vanille',
-      description:
-          'Délicieuse crème glacée à la vanille, parfait pour se rafraîchir.',
-      image: 'assets/images/ice_cream.png',
-      price: 4.49,
-      available: true,
-      units: [Unit.pack],
-      isLiquid: true,
-    ),
-  ];
+  final List<Product> _products = [];
+  void _fetchpainFromFirestore() {
+    FirebaseFirestore.instance
+        .collection('Products')
+        .where('catégorie', isEqualTo: 'laitiers')
+        .get()
+        .then((querySnapshot) {
+      final laitiers = querySnapshot.docs.map((doc) {
+        final data = doc.data();
+        final disponible = data['disponible'] as bool? ??
+            false; // Use a null check and provide a default value
+
+        if (data.containsKey('disponible')) {
+          return Product(
+            name: data['nom'],
+            description: data['description'],
+            price: data['prix'],
+            image: data['image'],
+            available: disponible,
+          );
+        } else {
+          // Handle case where 'disponible' field is missing or null
+          return Product(
+            name: data['nom'],
+            description: data['description'],
+            price: data['prix'],
+            image: data['image'],
+            available: false, // Provide a default value in this case
+          );
+        }
+      }).toList();
+
+      setState(() {
+        _products.addAll(laitiers);
+      });
+    }).catchError((error) {
+      if (kDebugMode) {
+        print('Failed to fetch laitiers: $error');
+      }
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchpainFromFirestore();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -144,7 +251,7 @@ class _DairyCategoryPageState extends State<DairyCategoryPage> {
 
     return Scaffold(
         appBar: AppBar(
-          title: const Text('Lait et Dérivés'),
+          title: const Text('Dairys'),
         ),
         body: GridView.builder(
           padding: const EdgeInsets.all(8),
@@ -154,11 +261,17 @@ class _DairyCategoryPageState extends State<DairyCategoryPage> {
             mainAxisSpacing: 8,
             crossAxisSpacing: 8,
           ),
-          itemCount: _dairyProducts.length,
+          itemCount: _products.length,
           itemBuilder: (context, index) {
-            final dairyProduct = _dairyProducts[index];
-            return DairyProductCard(
-              product: dairyProduct,
+            final product = _products[index];
+
+            return ProductCard(
+              product: product,
+              title: product.name,
+              description: product.description,
+              imageUrl: product.image,
+              price: product.price,
+              available: product.available,
             );
           },
         ),

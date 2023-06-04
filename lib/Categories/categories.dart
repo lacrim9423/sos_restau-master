@@ -18,10 +18,7 @@ class AllCategoriesPage extends StatelessWidget {
   void _goToHome(BuildContext context, String userId) {
     Navigator.push(
       context,
-      MaterialPageRoute(
-          builder: (context) => const HomePage(
-                userId: '',
-              )),
+      MaterialPageRoute(builder: (context) => const HomePage()),
     );
   }
 

@@ -420,10 +420,7 @@ class RegisterPage2 extends StatelessWidget {
       // Navigate to home page or any other desired screen
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(
-            builder: (context) => const HomePage(
-                  userId: '',
-                )),
+        MaterialPageRoute(builder: (context) => const HomePage()),
       );
     } catch (e) {
       // Handle registration errors

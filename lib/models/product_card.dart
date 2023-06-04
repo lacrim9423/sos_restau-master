@@ -52,7 +52,6 @@ class ProductCard extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  // ignore: library_private_types_in_public_api
   _ProductCardState createState() => _ProductCardState();
 }
 
@@ -136,7 +135,9 @@ class _ProductCardState extends State<ProductCard> {
                       widget.product.price,
                       widget.product.image,
                     );
-
+                    setState(() {
+                      _quantity = 0;
+                    });
                     showFlash(
                       context: context,
                       duration: const Duration(seconds: 2),

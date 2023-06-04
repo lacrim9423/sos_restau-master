@@ -61,10 +61,7 @@ class _ProfilePageState extends State<ProfilePage> {
   void _goToHome(BuildContext context) {
     Navigator.push(
       context,
-      MaterialPageRoute(
-          builder: (context) => const HomePage(
-                userId: '',
-              )),
+      MaterialPageRoute(builder: (context) => const HomePage()),
     );
   }
 

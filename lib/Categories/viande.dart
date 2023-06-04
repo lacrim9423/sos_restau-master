@@ -1,4 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:sos_restau/models/product_card.dart';
 import '../class/produit.dart';
@@ -7,7 +9,14 @@ import 'package:sos_restau/home.dart';
 import 'package:sos_restau/panier.dart';
 import 'package:sos_restau/profile.dart';
 
-class MeatCategoryPage extends StatelessWidget {
+class MeatCategoryPage extends StatefulWidget {
+  const MeatCategoryPage({Key? key}) : super(key: key);
+
+  @override
+  _MeatCategoryPageState createState() => _MeatCategoryPageState();
+}
+
+class _MeatCategoryPageState extends State<MeatCategoryPage> {
   void _goToPanier(BuildContext context, String userId) {
     Navigator.push(
       context,
@@ -18,10 +27,7 @@ class MeatCategoryPage extends StatelessWidget {
   void _goToHome(BuildContext context, String userId) {
     Navigator.push(
       context,
-      MaterialPageRoute(
-          builder: (context) => const HomePage(
-                userId: '',
-              )),
+      MaterialPageRoute(builder: (context) => HomePage()),
     );
   }
 
@@ -39,58 +45,40 @@ class MeatCategoryPage extends StatelessWidget {
     );
   }
 
-  final List<Product> meats = [
-    Product(
-      id: '1',
-      name: 'Burger',
-      description: 'Burger de boeuf grillé, garni de fromage et de légumes.',
-      image: 'assets/images/burger.png',
-      price: 4.99,
-      available: true,
-    ),
-    Product(
-      id: '2',
-      name: 'Poulet',
-      description: 'Poulet grillé, accompagné de riz et de légumes.',
-      image: 'assets/images/chicken.png',
-      price: 6.99,
-      available: true,
-    ),
-    Product(
-      id: '3',
-      name: 'Cuisse de poulet',
-      description: 'Cuisse de poulet grillée, accompagnée de frites.',
-      image: 'assets/images/chicken_leg.png',
-      price: 3.99,
-      available: true,
-    ),
-    Product(
-      id: '4',
-      name: 'Escalope de poulet',
-      description: 'Escalope de poulet panée, accompagnée de salade.',
-      image: 'assets/images/chicken_schnitzel.png',
-      price: 5.99,
-      available: true,
-    ),
-    Product(
-      id: '5',
-      name: 'Nuggets',
-      description: 'Nuggets de poulet croustillants, accompagnés de sauce.',
-      image: 'assets/images/chicken_nuggets.png',
-      price: 2.99,
-      available: true,
-    ),
-    Product(
-      id: '6',
-      name: 'Escalope de dinde',
-      description: 'Escalope de dinde grillée, accompagnée de légumes.',
-      image: 'assets/images/turkey_schnitzel.png',
-      price: 7.99,
-      available: true,
-    ),
-  ];
+  final List<Product> _products = [];
+  void _fetchviandeFromFirestore() {
+    FirebaseFirestore.instance
+        .collection('Products')
+        .where('catégorie', isEqualTo: 'viande')
+        .get()
+        .then((querySnapshot) {
+      final viande = querySnapshot.docs.map((doc) {
+        final data = doc.data();
 
-  MeatCategoryPage({super.key});
+        return Product(
+          name: data['nom'],
+          description: data['description'],
+          price: data['prix'],
+          image: data['image'],
+          available: data['disponible'],
+        );
+      }).toList();
+
+      setState(() {
+        _products.addAll(viande);
+      });
+    }).catchError((error) {
+      if (kDebugMode) {
+        print('Failed to fetch viande: $error');
+      }
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchviandeFromFirestore();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -109,9 +97,9 @@ class MeatCategoryPage extends StatelessWidget {
             mainAxisSpacing: 8,
             crossAxisSpacing: 8,
           ),
-          itemCount: meats.length,
+          itemCount: _products.length,
           itemBuilder: (context, index) {
-            final product = meats[index];
+            final product = _products[index];
             return ProductCard(
               product: product,
               title: product.name,
