@@ -1,6 +1,8 @@
 // ignore_for_file: library_private_types_in_public_api
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:sos_restau/class/produit.dart';
 import 'package:flash/flash.dart';
@@ -8,7 +10,6 @@ import 'package:sos_restau/historique.dart';
 import 'package:sos_restau/home.dart';
 import 'package:sos_restau/panier.dart';
 import 'package:sos_restau/profile.dart';
-
 import '../models/product_card.dart';
 
 class GroceryCategoryPage extends StatefulWidget {
@@ -29,10 +30,7 @@ class _GroceryCategoryPageState extends State<GroceryCategoryPage> {
   void _goToHome(BuildContext context, String userId) {
     Navigator.push(
       context,
-      MaterialPageRoute(
-          builder: (context) => const HomePage(
-                userId: '',
-              )),
+      MaterialPageRoute(builder: (context) => const HomePage()),
     );
   }
 
@@ -50,56 +48,40 @@ class _GroceryCategoryPageState extends State<GroceryCategoryPage> {
     );
   }
 
-  List<Product> groceryProducts = [
-    Product(
-      id: "1",
-      name: 'Pasta',
-      image: 'assets/images/pasta.jpg',
-      price: 2.99,
-      available: true,
-      description: '',
-    ),
-    Product(
-      id: "2",
-      name: 'Rice',
-      image: 'assets/images/rice.jpg',
-      price: 1.99,
-      available: true,
-      description: '',
-    ),
-    Product(
-      id: "3",
-      name: 'Cereal',
-      image: 'assets/images/cereal.jpg',
-      price: 3.49,
-      available: false,
-      description: '',
-    ),
-    Product(
-      id: "4",
-      name: 'Bread',
-      image: 'assets/images/bread.jpg',
-      price: 1.49,
-      available: true,
-      description: '',
-    ),
-    Product(
-      id: "5",
-      name: 'Milk',
-      image: 'assets/images/milk.jpg',
-      price: 2.99,
-      available: true,
-      description: '',
-    ),
-    Product(
-      id: "6",
-      name: 'Cheese',
-      image: 'assets/images/cheese.jpg',
-      price: 4.99,
-      available: true,
-      description: '',
-    ),
-  ];
+  final List<Product> _products = [];
+  void _fetchalimentationFromFirestore() {
+    FirebaseFirestore.instance
+        .collection('Products')
+        .where('catégorie', isEqualTo: 'alimentation')
+        .get()
+        .then((querySnapshot) {
+      final alimentation = querySnapshot.docs.map((doc) {
+        final data = doc.data();
+
+        return Product(
+          name: data['nom'],
+          description: data['description'],
+          price: data['prix'],
+          image: data['image'],
+          available: data['disponible'],
+        );
+      }).toList();
+
+      setState(() {
+        _products.addAll(alimentation);
+      });
+    }).catchError((error) {
+      if (kDebugMode) {
+        print('Failed to fetch fruits: $error');
+      }
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchalimentationFromFirestore();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -118,9 +100,9 @@ class _GroceryCategoryPageState extends State<GroceryCategoryPage> {
             mainAxisSpacing: 8,
             crossAxisSpacing: 8,
           ),
-          itemCount: groceryProducts.length,
+          itemCount: _products.length,
           itemBuilder: (context, index) {
-            final product = groceryProducts[index];
+            final product = _products[index];
             return ProductCard(
               product: product,
               title: product.name,
